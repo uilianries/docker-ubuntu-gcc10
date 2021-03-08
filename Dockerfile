@@ -65,8 +65,7 @@ RUN groupadd 1001 -g 1001 \
     && useradd -ms /bin/bash conan -g 1001 -G 1000,2000,999 \
     && printf "conan:conan" | chpasswd \
     && adduser conan sudo \
-    && printf "conan ALL= NOPASSWD: ALL\\n" >> /etc/sudoers \
-    && sed -i '0,/python3/s//python/' /usr/bin/lsb_release
+    && printf "conan ALL= NOPASSWD: ALL\\n" >> /etc/sudoers
 
 RUN wget --no-check-certificate --quiet -O /tmp/pyenv-installer https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer \
     && chmod +x /tmp/pyenv-installer \
