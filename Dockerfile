@@ -35,7 +35,7 @@ RUN apt-get -qq update \
     && wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.xz \
     && tar Jxf gcc-10.2.0.tar.xz \
     && cd gcc-10.2.0 \
-    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib \
+    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran \
     && make -j2 \
     && printf '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
     && ldconfig -v \
