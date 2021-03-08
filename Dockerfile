@@ -2,6 +2,9 @@ FROM ubuntu:xenial
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
+ENV PYENV_ROOT=/opt/pyenv \
+    PATH=/opt/pyenv/shims:${PATH}
+
 WORKDIR /root
 
 RUN apt-get -qq update \
