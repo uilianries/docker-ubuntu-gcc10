@@ -57,8 +57,22 @@ RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/
 RUN cd llvm-project-llvmorg-11.1.0 \
     && mkdir build \
     && cd build/ \
-    && cmake ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang,ldd,libcxx,libcxxabi -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_GO_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF -DCMAKE_PREFIX_PATH=/opt/llvm \
-    && cmake --build . --parallel 4
+    && cmake ../llvm \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_INSTALL_PREFIX=/opt/llvm \
+       -DLLVM_ENABLE_PROJECTS=clang \
+       -DLLVM_INCLUDE_EXAMPLES=OFF \
+       -DLLVM_INCLUDE_TESTS=OFF \
+       -DLLVM_INCLUDE_GO_TESTS=OFF \
+       -DLLVM_INCLUDE_DOCS=OFF \
+       -DLLVM_TARGETS_TO_BUILD=X86 \
+       -DLLVM_ENABLE_OCAMLDOC=OFF \
+       -DLLVM_BUILD_DOCS=Off \
+       -DLLVM_OPTIMIZED_TABLEGEN=ON \
+       -DCLANG_INCLUDE_TESTS=OFF \
+       -DCLANG_BUILD_EXAMPLES=OFF \
+    && cmake --build . --parallel 4 \
+    && cmake --build . --target install
 
 # RUN wget -q --no-check-certificate -O /usr/local/bin/jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-amd64/jfrog?bt_package=jfrog-cli-linux-amd64 \
 #     && chmod +x /usr/local/bin/jfrog
