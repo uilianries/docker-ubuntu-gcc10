@@ -1,16 +1,31 @@
 name: Build and Deploy
 on: [push]
 jobs:
-  build-and-deploy:
+  CLANG11:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build Docker image uilianries/clang11-xenial
+      run: docker build clang11/ -t uilianries/clang11-xenial
+    - name: Inspect Docker image uilianries/clang11-xenial
+      run: docker inspect uilianries/clang11-xenial
+    - name: Docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - name: Docker Upload image uilianries/clang11-xenial
+      run: docker push uilianries/clang11-xenial
+  GCC10:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Build Docker image uilianries/gcc10-xenial
-      run: docker build . -t uilianries/gcc10-xenial
+      run: docker build gcc10/ -t uilianries/gcc10-xenial
     - name: Inspect Docker image uilianries/gcc10-xenial
       run: docker inspect uilianries/gcc10-xenial
     - name: Validate compiler compatibility
-      run: bash test/test.sh
+      run: bash gcc10/test.sh
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
