@@ -57,8 +57,8 @@ RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/
 RUN cd llvm-project-llvmorg-11.1.0 \
     && mkdir build \
     && cd build/ \
-    && cmake ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang,ldd,libcxx,libcxxabi -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_GO_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF \
-    && cmake --build . --parallel 2
+    && cmake ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang,ldd,libcxx,libcxxabi -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_GO_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF -DCMAKE_PREFIX_PATH=/opt/llvm \
+    && cmake --build . --parallel 4
 
 # RUN wget -q --no-check-certificate -O /usr/local/bin/jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-amd64/jfrog?bt_package=jfrog-cli-linux-amd64 \
 #     && chmod +x /usr/local/bin/jfrog
