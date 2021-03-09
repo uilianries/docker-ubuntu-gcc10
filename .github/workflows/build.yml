@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - name: Download cached uilianries/clang11-xenial
+      run: docker pull uilianries/clang11-xenial
     - name: Build Docker image uilianries/clang11-xenial
       run: docker build clang11/ -t uilianries/clang11-xenial
     - name: Inspect Docker image uilianries/clang11-xenial
@@ -20,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - name: Download cached uilianries/gcc10-xenial
+      run: docker pull uilianries/gcc10-xenial
     - name: Build Docker image uilianries/gcc10-xenial
       run: docker build gcc10/ -t uilianries/gcc10-xenial
     - name: Inspect Docker image uilianries/gcc10-xenial
