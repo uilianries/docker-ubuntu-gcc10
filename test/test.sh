@@ -17,3 +17,12 @@ docker exec ${DOCKER_CONTAINER} conan profile new default --detect
 # Building an App using GCC 10, and Fmt (GCC 4.9)
 docker exec ${DOCKER_CONTAINER} conan install fmt/7.1.3@ -r conan-center -s compiler.version=4.9
 docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=4.9
+
+# Building an App using GCC 10, and Fmt (GCC 5)
+docker exec ${DOCKER_CONTAINER} conan install fmt/7.1.3@ -r conan-center -s compiler.version=5
+docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=5
+docker exec ${DOCKER_CONTAINER} conan install fmt/7.1.3@ -r conan-center -s compiler.version=5 -s compiler.libcxx=libstdc++11
+docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=5 -s compiler.libcxx=libstdc++11
+
+docker stop ${DOCKER_CONTAINER}
+docker rm -f ${DOCKER_CONTAINER}
