@@ -9,6 +9,8 @@ jobs:
       run: docker build . -t uilianries/gcc10-xenial
     - name: Inspect Docker image uilianries/gcc10-xenial
       run: docker inspect uilianries/gcc10-xenial
+    - name: Validate compiler compatibility
+      run: bash test/test.sh
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
