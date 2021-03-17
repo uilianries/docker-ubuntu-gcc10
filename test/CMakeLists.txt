@@ -4,10 +4,10 @@ project(foobar CXX)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-find_package(fmt REQUIRED)
+find_package(Poco CONFIG REQUIRED)
 
 add_executable(${CMAKE_PROJECT_NAME} main.cpp)
-target_link_libraries(${CMAKE_PROJECT_NAME} fmt::fmt)
+target_link_libraries(${CMAKE_PROJECT_NAME} Poco::Poco)
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 
 enable_testing()
