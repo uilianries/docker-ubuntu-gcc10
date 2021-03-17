@@ -13,15 +13,17 @@ docker exec ${DOCKER_CONTAINER} clang++ --version
 docker exec ${DOCKER_CONTAINER} pip install -U conan
 docker exec ${DOCKER_CONTAINER} conan --version
 docker exec ${DOCKER_CONTAINER} conan profile new default --detect
+docker exec ${DOCKER_CONTAINER} conan profile update settings.compiler=clang default
+docker exec ${DOCKER_CONTAINER} conan profile update settings.compiler.version=11 default
 
 # Building an App using Clang 11, and Fmt (clang 3.9)
-docker exec ${DOCKER_CONTAINER} conan install fmt/7.1.3@ -r conan-center -s compiler.version=3.9
+docker exec ${DOCKER_CONTAINER} conan install poco/1.9.4@ -r conan-center -s compiler.version=3.9
 docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=3.9
 
 # Building an App using Clang 11, and Fmt (clang 3.9)
-docker exec ${DOCKER_CONTAINER} conan install fmt/7.1.3@ -r conan-center -s compiler.version=5
+docker exec ${DOCKER_CONTAINER} conan install poco/1.9.4@ -r conan-center -s compiler.version=5
 docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=5
-docker exec ${DOCKER_CONTAINER} conan install fmt/7.1.3@ -r conan-center -s compiler.version=5 -s compiler.libcxx=libstdc++11
+docker exec ${DOCKER_CONTAINER} conan install poco/1.9.4@ -r conan-center -s compiler.version=5 -s compiler.libcxx=libstdc++11
 docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=5 -s compiler.libcxx=libstdc++11
 
 docker stop ${DOCKER_CONTAINER}
