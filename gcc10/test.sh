@@ -2,8 +2,8 @@
 
 set -ex
 
-DOCKER_CONTAINER=compiler_container
-DOCKER_IMAGE=uilianries/gcc10
+DOCKER_CONTAINER=compiler_container-gcc-xenial
+DOCKER_IMAGE=uilianries/gcc10-xenial
 
 docker run -t -d --name ${DOCKER_CONTAINER} -v ${PWD}:/home/conan/project ${DOCKER_IMAGE}
 

@@ -2,8 +2,8 @@
 
 set -ex
 
-DOCKER_CONTAINER=compiler_container_clang11
-DOCKER_IMAGE=uilianries/clang11
+DOCKER_CONTAINER=compiler_container_clang11-xenial
+DOCKER_IMAGE=uilianries/clang11-xenial
 
 docker run -t -d --name ${DOCKER_CONTAINER} -v ${PWD}:/home/conan/project ${DOCKER_IMAGE}
 
