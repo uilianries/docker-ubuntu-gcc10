@@ -16,6 +16,10 @@ docker exec ${DOCKER_CONTAINER} conan profile new default --detect
 docker exec ${DOCKER_CONTAINER} conan profile update settings.compiler=clang default
 docker exec ${DOCKER_CONTAINER} conan profile update settings.compiler.version=11 default
 
+# Build Poco from source
+docker exec ${DOCKER_CONTAINER}git clone https://github.com/conan-io/conan-center-index.git /tmp/cci
+docker exec ${DOCKER_CONTAINER} conan create /tmp/cci/recipes/poco/all 1.9.4@ --build
+
 # Building an App using Clang 11, and Fmt (clang 3.9)
 docker exec ${DOCKER_CONTAINER} conan install poco/1.9.4@ -r conan-center -s compiler.version=3.9
 docker exec ${DOCKER_CONTAINER} conan create project/test user/testing -s fmt:compiler.version=3.9
