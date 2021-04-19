@@ -9,6 +9,12 @@ jobs:
       run: docker-compose build base
     - name: Build Docker image uilianries/gcc9
       run: docker-compose build gcc9
+    - name: Inspect Docker image uilianries/base
+      run: docker inspect uilianries/base
+    - name: Inspect Docker image uilianries/gcc9
+      run: docker inspect uilianries/gcc9
+    - name: Docker login
+      env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
