@@ -1,0 +1,18 @@
+version: '3'
+services:
+    base:
+        build:
+            context: base
+            dockerfile: Dockerfile
+        image: "uilianries/base"
+        container_name: base
+        tty: true
+    gcc9:
+        build:
+            context: gcc9
+            dockerfile: Dockerfile
+        image: "uilianries/gcc9"
+        container_name: gcc9
+        tty: true
+        depends_on:
+          - base
