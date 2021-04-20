@@ -5,20 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Build base image
-      run: docker-compose build base
-    - name: Build Docker image uilianries/gcc9
-      run: docker-compose build gcc9
-    - name: Inspect Docker image uilianries/base
-      run: docker inspect uilianries/base
-    - name: Inspect Docker image uilianries/gcc9
-      run: docker inspect uilianries/gcc9
+    - name: Build GCC 10
+      run: docker-compose build gcc10
+    - name: Inspect Docker image uilianries/gcc10
+      run: docker inspect uilianries/gcc10
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/base
-      run: docker push uilianries/base
-    - name: Docker Upload image uilianries/gcc9
-      run: docker push uilianries/gcc9
+    - name: Docker Upload image uilianries/gcc10
+      run: docker push uilianries/gcc10
