@@ -1,18 +1,18 @@
 name: Build and Deploy
 on: [push]
 jobs:
-  GCC9:
+  GCC10:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Build GCC 10
-      run: docker-compose build gcc10
-    - name: Inspect Docker image uilianries/gcc10
-      run: docker inspect uilianries/gcc10
+      run: docker-compose build gcc10-libs
+    - name: Inspect Docker image uilianries/gcc10-libs
+      run: docker inspect uilianries/gcc10-libs
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/gcc10
-      run: docker push uilianries/gcc10
+    - name: Docker Upload image uilianries/gcc10-libs
+      run: docker push uilianries/gcc10-libs

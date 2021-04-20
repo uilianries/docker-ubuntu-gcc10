@@ -25,3 +25,12 @@ services:
         tty: true
         depends_on:
           - base
+    gcc10-libs:
+        build:
+            context: gcc10_libs
+            dockerfile: Dockerfile
+        image: "uilianries/gcc10-libs"
+        container_name: gcc10-libs
+        tty: true
+        depends_on:
+          - base
