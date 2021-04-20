@@ -7,6 +7,13 @@ services:
         image: "uilianries/base"
         container_name: base
         tty: true
+    gcc8:
+        build:
+            context: gcc8
+            dockerfile: Dockerfile
+        image: "uilianries/gcc8"
+        container_name: gcc8
+        tty: true
     gcc9:
         build:
             context: gcc9
@@ -23,8 +30,6 @@ services:
         image: "uilianries/gcc10"
         container_name: gcc10
         tty: true
-        depends_on:
-          - base
     gcc10-libs:
         build:
             context: gcc10_libs
@@ -32,5 +37,3 @@ services:
         image: "uilianries/gcc10-libs"
         container_name: gcc10-libs
         tty: true
-        depends_on:
-          - base

@@ -1,11 +1,11 @@
 name: Build and Deploy
 on: [push]
 jobs:
-  GCC10:
+  GCC10 LIBS:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Build GCC 10
+    - name: Build GCC 10 LIBS
       run: docker-compose build gcc10-libs
     - name: Inspect Docker image uilianries/gcc10-libs
       run: docker inspect uilianries/gcc10-libs
@@ -16,3 +16,48 @@ jobs:
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
     - name: Docker Upload image uilianries/gcc10-libs
       run: docker push uilianries/gcc10-libs
+  GCC10:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build GCC 10
+      run: docker-compose build gcc10
+    - name: Inspect Docker image uilianries/gcc10
+      run: docker inspect uilianries/gcc10
+    - name: Docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - name: Docker Upload image uilianries/gcc10
+      run: docker push uilianries/gcc10
+  GCC9:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build GCC 9
+      run: docker-compose build gcc9
+    - name: Inspect Docker image uilianries/gcc9
+      run: docker inspect uilianries/gcc9
+    - name: Docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - name: Docker Upload image uilianries/gcc9
+      run: docker push uilianries/gcc9
+  GCC8:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build GCC 8
+      run: docker-compose build gcc8
+    - name: Inspect Docker image uilianries/gcc8
+      run: docker inspect uilianries/gcc8
+    - name: Docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - name: Docker Upload image uilianries/gcc8
+      run: docker push uilianries/gcc8

@@ -42,3 +42,9 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
     && make -j2 \
     && make install-strip
+
+RUN mv /tmp/install/lib /usr/local \
+    && mv /tmp/install/lib64 /usr/local \
+    && printf '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
+    && ldconfig \
+    && ln -s -f /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/local/lib64/libstdc++.so.6.0.28

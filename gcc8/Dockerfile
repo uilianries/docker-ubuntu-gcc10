@@ -36,16 +36,6 @@ RUN apt-get -qq update \
        autoconf-archive \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-9.3.0/gcc-9.3.0.tar.xz \
-    && tar Jxf gcc-9.3.0.tar.xz \
-    && cd gcc-9.3.0 \
-    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib \
-    && make -j2 \
-    && printf '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
-    && ldconfig -v \
-    && make install-strip \
-    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
-    && rm -rf /root/gcc-9.3.0.tar.xz /root/gcc-9.3.0
 
 RUN apt-get purge -y g++-multilib \
     && apt-get autoremove -y \
@@ -102,6 +92,14 @@ RUN pip install -q --upgrade --no-cache-dir pip \
 #USER conan
 #WORKDIR /home/conan
 WORKDIR /root
+
+RUN printf "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main\n" >> /etc/apt/sources.list \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 60C317803A41BA51845E371A1E9377A2BA9EF27F \
+    && apt-get update
+
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
+       libstdc++-8-dev \
+       g++-8
 
 RUN mkdir -p /home/conan/.conan \
     && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \
