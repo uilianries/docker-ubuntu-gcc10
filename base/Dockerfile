@@ -36,6 +36,14 @@ RUN apt-get -qq update \
        autoconf-archive \
     && rm -rf /var/lib/apt/lists/*
 
+RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.xz \
+    && tar Jxf gcc-10.2.0.tar.xz \
+    && cd gcc-10.2.0 \
+    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
+    && make -j2 \
+    && make install-strip \
+    && rm -rf /root/gcc-10.2.0.tar.xz /root/gcc-10.2.0
+
 RUN wget -q --no-check-certificate https://cmake.org/files/v3.19/cmake-3.19.6-Linux-x86_64.tar.gz \
     && tar -xzf cmake-3.19.6-Linux-x86_64.tar.gz \
        --exclude=bin/cmake-gui \
@@ -78,40 +86,26 @@ RUN chown -R conan:1001 /opt/pyenv \
 RUN pip install -q --upgrade --no-cache-dir pip \
     pip install -q --no-cache-dir conan conan-package-tools
 
-#RUN apt-get purge -y g++-multilib \
-#    && apt-get autoremove -y \
-#    && apt-get autoclean \
-#    && apt-get update
-
-#USER conan
-#WORKDIR /home/conan
-WORKDIR /root
-
-RUN printf "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main\n" >> /etc/apt/sources.list \
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 60C317803A41BA51845E371A1E9377A2BA9EF27F \
+RUN apt-get purge -y g++-multilib \
+    && apt-get autoremove -y \
+    && apt-get autoclean \
     && apt-get update
 
-RUN cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21 /tmp/libstdc++.so.6.0.21 \
-    && apt-get install --no-install-recommends --no-install-suggests -y \
-       libstdc++-5-dev \
-       libstdc++-6-dev \
-       libstdc++-7-dev \
-       libstdc++-8-dev \
-       libstdc++-9-dev
+RUN mv /tmp/install/lib /usr/local \
+    && mv /tmp/install/lib64 /usr/local \
+    && rm -rf /tmp/install \
+    && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
+    && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
+    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && mv /etc/ld.so.conf.d/libc.conf /etc/ld.so.conf.d/10libc.conf \
+    && mv /etc/ld.so.conf.d/x86_64-linux-gnu.conf /etc/ld.so.conf.d/30x86_64-linux-gnu.conf \
+    && mv /etc/ld.so.conf.d/zz_i386-biarch-compat.conf /etc/ld.so.conf.d/40zz_i386-biarch-compat.conf \
+    && mv /etc/ld.so.conf.d/zz_x32-biarch-compat.conf /etc/ld.so.conf.d/50zz_x32-biarch-compat.conf \
+    && rm /etc/ld.so.cache \
+    && ldconfig
 
-RUN cp /tmp/libstdc++.so.6.0.21 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21 \
-    && ln -s /usr/lib/gcc/x86_64-linux-gnu/9/libstdc++.so /usr/lib/gcc/x86_64-linux-gnu/9/libstdc++.so.9 \
-    && ln -s /usr/lib/gcc/x86_64-linux-gnu/8/libstdc++.so /usr/lib/gcc/x86_64-linux-gnu/8/libstdc++.so.8 \
-    && ln -s /usr/lib/gcc/x86_64-linux-gnu/7/libstdc++.so /usr/lib/gcc/x86_64-linux-gnu/7/libstdc++.so.7 \
-    && ln -s /usr/lib/gcc/x86_64-linux-gnu/6/libstdc++.so /usr/lib/gcc/x86_64-linux-gnu/6/libstdc++.so.6 \
-    && ln -s /usr/lib/gcc/x86_64-linux-gnu/5/libstdc++.so /usr/lib/gcc/x86_64-linux-gnu/5/libstdc++.so.5 \
-    && printf /usr/lib/gcc/x86_64-linux-gnu/9/ >> /etc/ld.so.conf.d/libstdcpp-dev.conf \
-    && printf /usr/lib/gcc/x86_64-linux-gnu/8/ >> /etc/ld.so.conf.d/libstdcpp-dev.conf \
-    && printf /usr/lib/gcc/x86_64-linux-gnu/7/ >> /etc/ld.so.conf.d/libstdcpp-dev.conf \
-    && printf /usr/lib/gcc/x86_64-linux-gnu/6/ >> /etc/ld.so.conf.d/libstdcpp-dev.conf \
-    && printf /usr/lib/gcc/x86_64-linux-gnu/5/ >> /etc/ld.so.conf.d/libstdcpp-dev.conf \
-    && ldconfig \
-    && ln -s -f /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21 /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+USER conan
+WORKDIR /home/conan
 
 RUN mkdir -p /home/conan/.conan \
     && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \

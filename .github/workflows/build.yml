@@ -1,22 +1,23 @@
 name: Build and Deploy
 on: [push]
 jobs:
-  GCC10-LIBS:
+  base:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Build GCC 10 LIBS
-      run: docker-compose build gcc10-libs
-    - name: Inspect Docker image uilianries/gcc10-libs
-      run: docker inspect uilianries/gcc10-libs
+    - name: Build GCC Base Image
+      run: docker-compose build base
+    - name: Inspect Docker image uilianries/base
+      run: docker inspect uilianries/base
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/gcc10-libs
-      run: docker push uilianries/gcc10-libs
-  GCC10:
+    - name: Docker Upload image uilianries/base
+      run: docker push uilianries/base
+  gcc10:
+    needs: base
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -32,6 +33,7 @@ jobs:
     - name: Docker Upload image uilianries/gcc10
       run: docker push uilianries/gcc10
   GCC9:
+    needs: base
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -47,6 +49,7 @@ jobs:
     - name: Docker Upload image uilianries/gcc9
       run: docker push uilianries/gcc9
   GCC8:
+    needs: base
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master

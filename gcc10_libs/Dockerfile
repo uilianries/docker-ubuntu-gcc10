@@ -45,6 +45,12 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
 
 RUN mv /tmp/install/lib /usr/local \
     && mv /tmp/install/lib64 /usr/local \
-    && printf '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
-    && ldconfig \
-    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+    && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
+    && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
+    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && mv /etc/ld.so.conf.d/libc.conf /etc/ld.so.conf.d/10libc.conf \
+    && mv /etc/ld.so.conf.d/x86_64-linux-gnu.conf /etc/ld.so.conf.d/30x86_64-linux-gnu.conf \
+    && mv /etc/ld.so.conf.d/zz_i386-biarch-compat.conf /etc/ld.so.conf.d/40zz_i386-biarch-compat.conf \
+    && mv /etc/ld.so.conf.d/zz_x32-biarch-compat.conf /etc/ld.so.conf.d/50zz_x32-biarch-compat.conf \
+    && rm /etc/ld.so.cache \
+    && ldconfig
