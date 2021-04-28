@@ -89,11 +89,11 @@ RUN pip install -q --upgrade --no-cache-dir pip \
 RUN mv /tmp/install/lib /usr/local \
     && mv /tmp/install/lib64 /usr/local \
     && rm -rf /tmp/install \
-    && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/30local-lib.conf \
-    && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/30local-lib.conf \
+    && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
+    && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && mv /etc/ld.so.conf.d/libc.conf /etc/ld.so.conf.d/10libc.conf \
-    && mv /etc/ld.so.conf.d/x86_64-linux-gnu.conf /etc/ld.so.conf.d/20x86_64-linux-gnu.conf \
+    && mv /etc/ld.so.conf.d/x86_64-linux-gnu.conf /etc/ld.so.conf.d/30x86_64-linux-gnu.conf \
     && mv /etc/ld.so.conf.d/zz_i386-biarch-compat.conf /etc/ld.so.conf.d/40zz_i386-biarch-compat.conf \
     && mv /etc/ld.so.conf.d/zz_x32-biarch-compat.conf /etc/ld.so.conf.d/50zz_x32-biarch-compat.conf \
     && rm /etc/ld.so.cache \
