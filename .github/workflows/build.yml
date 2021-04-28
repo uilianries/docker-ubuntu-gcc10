@@ -8,7 +8,7 @@ jobs:
     - name: Build GCC Base Image
       run: |
         docker pull uilianries/base
-        docker-compose build base
+        docker build -t uilianries/base base/
     - name: Inspect Docker image uilianries/base
       run: docker inspect uilianries/base
     - name: Docker login
@@ -30,6 +30,7 @@ jobs:
       run: |
         docker pull uilianries/${{ matrix.version }}
         docker-compose build ${{ matrix.version }}
+        docker build -t uilianries/${{ matrix.version }} ${{ matrix.version }}/
     - name: Inspect Docker image uilianries/${{ matrix.version }}
       run: docker inspect uilianries/${{ matrix.version }}
     - name: Docker login
