@@ -12,6 +12,12 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && make install-strip \
     && rm -rf gcc-10.2.0.tar.xz gcc-10.2.0
 
+RUN apt-get purge -y g++-multilib \
+    && apt-get autoremove -y \
+    && apt-get autoclean \
+    && apt-get update \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN mv /tmp/install/bin/* /usr/local/bin \
     && mv /tmp/install/libexec /usr/local/libexec \
     && mv /tmp/install/include /usr/local/include \

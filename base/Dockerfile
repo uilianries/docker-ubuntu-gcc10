@@ -86,11 +86,6 @@ RUN chown -R conan:1001 /opt/pyenv \
 RUN pip install -q --upgrade --no-cache-dir pip \
     pip install -q --no-cache-dir conan conan-package-tools
 
-RUN apt-get purge -y g++-multilib \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
-    && apt-get update
-
 RUN mv /tmp/install/lib /usr/local \
     && mv /tmp/install/lib64 /usr/local \
     && rm -rf /tmp/install \

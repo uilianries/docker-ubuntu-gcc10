@@ -13,4 +13,3 @@ class Pkg(ConanFile):
         cmake.verbose = True
         cmake.configure()
         cmake.build()
-        cmake.test(args=["--verbose"])
