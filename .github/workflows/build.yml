@@ -6,7 +6,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build GCC Base Image
-      run: docker-compose build base
+      run: |
+        docker-compose pull base
+        docker-compose build base
     - name: Inspect Docker image uilianries/base
       run: docker inspect uilianries/base
     - name: Docker login
@@ -16,51 +18,41 @@ jobs:
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
     - name: Docker Upload image uilianries/base
       run: docker push uilianries/base
-  gcc10:
+  build:
     needs: base
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [gcc10, gcc9, gcc8]
     steps:
     - uses: actions/checkout@master
-    - name: Build GCC 10
-      run: docker-compose build gcc10
-    - name: Inspect Docker image uilianries/gcc10
-      run: docker inspect uilianries/gcc10
+    - name: Build ${{ matrix.version }}
+      run: |
+        docker-compose pull ${{ matrix.version }}
+        docker-compose build ${{ matrix.version }}
+    - name: Inspect Docker image uilianries/${{ matrix.version }}
+      run: docker inspect uilianries/${{ matrix.version }}
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/gcc10
-      run: docker push uilianries/gcc10
-  GCC9:
-    needs: base
+    - name: Docker Upload image uilianries/${{ matrix.version }}
+      run: docker push uilianries/${{ matrix.version }}
+  test:
+    needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [gcc10, gcc9, gcc8]
     steps:
     - uses: actions/checkout@master
-    - name: Build GCC 9
-      run: docker-compose build gcc9
-    - name: Inspect Docker image uilianries/gcc9
-      run: docker inspect uilianries/gcc9
-    - name: Docker login
-      env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/gcc9
-      run: docker push uilianries/gcc9
-  GCC8:
-    needs: base
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Build GCC 8
-      run: docker-compose build gcc8
-    - name: Inspect Docker image uilianries/gcc8
-      run: docker inspect uilianries/gcc8
-    - name: Docker login
-      env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/gcc8
-      run: docker push uilianries/gcc8
+    - name: Test ${{ matrix.version }}
+      run: |
+        docker pull uilianries/${{ matrix.version }}
+        docker run -t -d --name ${{ matrix.version }} uilianries/${{ matrix.version }}
+        docker exec ${{ matrix.version }} python --version
+        docker exec ${{ matrix.version }} pip --version
+        docker exec ${{ matrix.version }} conan --version
+        docker exec ${{ matrix.version }} conan config init --force
+        docker exec ${{ matrix.version }} conan install -r conan-center poco/1.9.4@ --build=poco
