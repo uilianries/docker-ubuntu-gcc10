@@ -1,7 +1,25 @@
 name: Build and Deploy
 on: [push]
 jobs:
+  base:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build GCC Base Image
+      run: |
+        docker pull uilianries/base
+        docker build -t uilianries/base base/
+    - name: Inspect Docker image uilianries/base
+      run: docker inspect uilianries/base
+    - name: Docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - name: Docker Upload image uilianries/base
+      run: docker push uilianries/base
   build:
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       matrix:
