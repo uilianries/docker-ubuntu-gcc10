@@ -97,7 +97,7 @@ RUN mv /tmp/install/lib /usr/local \
     && mv /etc/ld.so.conf.d/zz_i386-biarch-compat.conf /etc/ld.so.conf.d/40zz_i386-biarch-compat.conf \
     && mv /etc/ld.so.conf.d/zz_x32-biarch-compat.conf /etc/ld.so.conf.d/50zz_x32-biarch-compat.conf \
     && rm /etc/ld.so.cache \
-    && ldconfig
+    && ldconfig -C /etc/ld.so.cache
 
 USER conan
 WORKDIR /home/conan

@@ -19,7 +19,7 @@ RUN apt-get purge -y g++-multilib \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mv /tmp/install/bin/* /usr/local/bin \
-    && mv /tmp/install/libexec/gcc/x86_64-linux-gnu/9.3.0/* /usr/local/libexec \
+    && mv /tmp/install/libexec /usr/local/libexec \
     && mv /tmp/install/include/c++/9.3.0/* /usr/local/include \
     && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
     && rm -rf /tmp/install
