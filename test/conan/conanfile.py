@@ -13,3 +13,10 @@ class Pkg(ConanFile):
         cmake.verbose = True
         cmake.configure()
         cmake.build()
+
+    def deploy(self):
+        self.copy("*")
+        self.copy_deps("*.so*")
+
+    def package(self):
+        self.copy("*")

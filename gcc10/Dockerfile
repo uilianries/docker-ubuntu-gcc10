@@ -19,8 +19,9 @@ RUN apt-get purge -y g++-multilib \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mv /tmp/install/bin/* /usr/local/bin \
-    && mv /usr/local/libexec/gcc/x86_64-linux-gnu/10.2.0/* /usr/local/libexec \
-    && mv /usr/local/include/include/c++/10.2.0/* /usr/local/include \
-    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100
+    && mv /tmp/install/libexec/gcc/x86_64-linux-gnu/10.2.0/* /usr/local/libexec \
+    && mv /tmp/install/include/c++/10.2.0/* /usr/local/include \
+    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+    && rm -rf /tmp/install
 
 USER conan

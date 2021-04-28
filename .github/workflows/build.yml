@@ -1,25 +1,7 @@
 name: Build and Deploy
 on: [push]
 jobs:
-  base:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Build GCC Base Image
-      run: |
-        docker pull uilianries/base
-        docker build -t uilianries/base base/
-    - name: Inspect Docker image uilianries/base
-      run: docker inspect uilianries/base
-    - name: Docker login
-      env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/base
-      run: docker push uilianries/base
   build:
-    needs: base
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -51,9 +33,10 @@ jobs:
     - name: Test ${{ matrix.version }}
       run: |
         docker pull uilianries/${{ matrix.version }}
-        docker run -t -d --name ${{ matrix.version }} uilianries/${{ matrix.version }}
+        docker run -t -d -v ${PWD}:/tmp/project --name ${{ matrix.version }} uilianries/${{ matrix.version }}
         docker exec ${{ matrix.version }} python --version
         docker exec ${{ matrix.version }} pip --version
+        docker exec ${{ matrix.version }} cmake --version
         docker exec ${{ matrix.version }} conan --version
         docker exec ${{ matrix.version }} conan config init --force
         docker exec ${{ matrix.version }} conan install -r conan-center poco/1.9.4@ --build=poco
