@@ -7,7 +7,7 @@ jobs:
     - uses: actions/checkout@master
     - name: Build GCC Base Image
       run: |
-        docker-compose pull base
+        docker pull uilianries/base
         docker-compose build base
     - name: Inspect Docker image uilianries/base
       run: docker inspect uilianries/base
@@ -28,7 +28,7 @@ jobs:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
       run: |
-        docker-compose pull ${{ matrix.version }}
+        docker pull uilianries/${{ matrix.version }}
         docker-compose build ${{ matrix.version }}
     - name: Inspect Docker image uilianries/${{ matrix.version }}
       run: docker inspect uilianries/${{ matrix.version }}
