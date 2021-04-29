@@ -32,7 +32,7 @@ jobs:
         CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
       run: |
         docker pull uilianries/${{ matrix.version }}
-        docker build -t uilianries/${{ matrix.version }} --build-arg CONAN_PASSWORD=${{ secrects.CONAN_PASSWORD }} CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}/
+        docker build -t uilianries/${{ matrix.version }} --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}/
   build:
     needs: conanfy
     runs-on: ubuntu-latest
