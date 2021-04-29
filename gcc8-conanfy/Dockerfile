@@ -18,8 +18,7 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && cd gcc-8.4.0 \
     && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
     && make -j2 \
-    && make install-strip \
-    && rm -rf gcc-8.4.0.tar.xz gcc-8.4.0
+    && make install-strip
 
 RUN conan create . gcc/8.4.0@uilianries/stable \
     && conan upload --all gcc/8.4.0@uilianries/stable -r uilianr

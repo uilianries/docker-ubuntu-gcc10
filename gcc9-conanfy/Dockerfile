@@ -18,8 +18,7 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && cd gcc-9.3.0 \
     && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
     && make -j2 \
-    && make install-strip \
-    && rm -rf gcc-9.3.0.tar.xz gcc-9.3.0
+    && make install-strip
 
 RUN conan create . gcc/9.3.0@uilianries/stable \
     && conan upload --all gcc/9.3.0@uilianries/stable -r uilianr
