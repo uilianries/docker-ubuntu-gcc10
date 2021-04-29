@@ -8,6 +8,8 @@ ENV CONAN_REVISIONS_ENABLED=1
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
+COPY conanfile.py .
+
 RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/virtual \
     && conan user -r uilianr -p ${CONAN_PASSWORD} ${CONAN_LOGIN_USERNAME}
 
