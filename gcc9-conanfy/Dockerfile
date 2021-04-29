@@ -10,7 +10,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 COPY conanfile.py .
 
-RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/virtual \
+RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
     && conan user -r uilianr -p ${CONAN_PASSWORD} ${CONAN_LOGIN_USERNAME}
 
 RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-9.3.0/gcc-9.3.0.tar.xz \

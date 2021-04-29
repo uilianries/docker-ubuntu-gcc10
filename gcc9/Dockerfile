@@ -4,7 +4,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ENV CONAN_REVISIONS_ENABLED=1
 
-RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/virtual \
+RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
     && mkdir /tmp/install \
     && cd /tmp/install \
     && conan install gcc/9.3.0@uilianries/stable -g deploy
