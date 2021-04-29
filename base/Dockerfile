@@ -86,8 +86,7 @@ RUN chown -R conan:1001 /opt/pyenv \
 RUN pip install -q --upgrade --no-cache-dir pip \
     pip install -q --no-cache-dir conan conan-package-tools
 
-RUN mv /tmp/install/lib /usr/local \
-    && mv /tmp/install/lib64 /usr/local \
+RUN mv /tmp/install/lib64 /usr/local \
     && rm -rf /tmp/install \
     && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
