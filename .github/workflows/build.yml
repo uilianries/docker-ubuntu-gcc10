@@ -36,9 +36,8 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - name: Docker Upload image uilianries/${{ secrets.CONAN_PASSWORD }}
-      run: docker push uilianries/${{ secrets.CONAN_PASSWORD }}
-  build:
+    - name: Docker Upload image uilianries/${{ matrix.version }}
+      run: docker push uilianries/${{ matrix.version }}
     needs: conanfy
     runs-on: ubuntu-latest
     strategy:
