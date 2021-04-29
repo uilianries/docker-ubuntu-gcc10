@@ -2,6 +2,7 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
+    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -18,8 +19,22 @@ jobs:
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
     - name: Docker Upload image uilianries/base
       run: docker push uilianries/base
+  conanfy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [gcc8-conanfy, gcc9-conanfy, gcc10-conanfy]
+    steps:
+    - uses: actions/checkout@master
+    - name: Build ${{ matrix.version }}
+      env:
+        CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
+        CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
+      run: |
+        docker pull uilianries/${{ matrix.version }}
+        docker build -t uilianries/${{ matrix.version }} --build-arg CONAN_PASSWORD=${{ secrects.CONAN_PASSWORD }} CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}/
   build:
-    needs: base
+    needs: conanfy
     runs-on: ubuntu-latest
     strategy:
       matrix:

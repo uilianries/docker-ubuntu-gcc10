@@ -2,15 +2,12 @@ FROM uilianries/base
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
-USER root
+RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/virtual \
+    && mkdir /tmp/install \
+    && cd /tmp/install \
+    && conan install gcc/9.3.0@uilianries/stable -g deploy
 
-RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-9.3.0/gcc-9.3.0.tar.xz \
-    && tar Jxf gcc-9.3.0.tar.xz \
-    && cd gcc-9.3.0 \
-    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
-    && make -j2 \
-    && make install-strip \
-    && rm -rf gcc-9.3.0.tar.xz gcc-9.3.0
+USER root
 
 RUN apt-get purge -y g++-multilib \
     && apt-get autoremove -y \
@@ -22,6 +19,7 @@ RUN mv /tmp/install/bin/* /usr/local/bin \
     && mv /tmp/install/libexec /usr/local/libexec \
     && mv /tmp/install/include/c++/9.3.0/* /usr/local/include \
     && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
-    && rm -rf /tmp/install
+    && rm -rf /tmp/install \
+    && rm -rf /home/conan/.conan
 
 USER conan
