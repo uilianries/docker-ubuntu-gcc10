@@ -2,14 +2,12 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
-    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Build GCC Base Image
       run: |
-        docker pull uilianries/base
-        docker build -t uilianries/base base/
+        docker-compose build --pull base
     - name: Inspect Docker image uilianries/base
       run: docker inspect uilianries/base
     - name: Docker login
@@ -20,7 +18,7 @@ jobs:
     - name: Docker Upload image uilianries/base
       run: docker push uilianries/base
   conanfy:
-    if: False
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,7 +29,7 @@ jobs:
       env:
         CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
         CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
-      run: docker build -t uilianries/${{ matrix.version }} --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}/
+      run: docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -40,7 +38,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build:
-    if: False
+    needs: conanfy
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,8 +46,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
-      run: |
-        docker build -t uilianries/${{ matrix.version }} ${{ matrix.version }}/
+      run: docker-compose build ${{ matrix.version }}
     - name: Inspect Docker image uilianries/${{ matrix.version }}
       run: docker inspect uilianries/${{ matrix.version }}
     - name: Docker login
@@ -60,6 +57,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test:
+    needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:

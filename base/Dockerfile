@@ -5,6 +5,8 @@ LABEL maintainer="Conan.io <info@conan.io>"
 ENV PYENV_ROOT=/opt/pyenv \
     PATH=/opt/pyenv/shims:${PATH}
 
+ARG GCC_VERSION
+
 WORKDIR /root
 
 RUN apt-get -qq update \
@@ -36,13 +38,13 @@ RUN apt-get -qq update \
        autoconf-archive \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.xz \
-    && tar Jxf gcc-10.2.0.tar.xz \
-    && cd gcc-10.2.0 \
+RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
+    && tar Jxf gcc-${GCC_VERSION}.tar.xz \
+    && cd gcc-${GCC_VERSION} \
     && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
     && make -j2 \
     && make install-strip \
-    && rm -rf /root/gcc-10.2.0.tar.xz /root/gcc-10.2.0
+    && rm -rf /root/gcc-${GCC_VERSION}.tar.xz /root/gcc-${GCC_VERSION}
 
 RUN wget -q --no-check-certificate https://cmake.org/files/v3.19/cmake-3.19.6-Linux-x86_64.tar.gz \
     && tar -xzf cmake-3.19.6-Linux-x86_64.tar.gz \

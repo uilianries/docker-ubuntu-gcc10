@@ -4,20 +4,53 @@ services:
         build:
             context: base
             dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 10.3.0
         image: "uilianries/base"
         container_name: base
         tty: true
+    gcc8-conanfy:
+        build:
+            context: conanfy
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 8.4.0
+        image: "uilianries/gcc8-conanfy"
+        container_name: gcc8_conan
+        tty: true
+    gcc9-conanfy:
+        build:
+            context: conanfy
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 9.3.0
+        image: "uilianries/gcc9-conanfy"
+        container_name: gcc9_conan
+        tty: true
+    gcc10-conanfy:
+        build:
+            context: conanfy
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 10.3.0
+        image: "uilianries/gcc9-conanfy"
+        container_name: gcc9_conan
+        tty: true
     gcc8:
         build:
-            context: gcc8
+            context: final
             dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 8.4.0
         image: "uilianries/gcc8"
         container_name: gcc8
         tty: true
     gcc9:
         build:
-            context: gcc9
+            context: final
             dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 9.3.0
         image: "uilianries/gcc9"
         container_name: gcc9
         tty: true
@@ -25,15 +58,10 @@ services:
           - base
     gcc10:
         build:
-            context: gcc10
+            context: final
             dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 10.3.0
         image: "uilianries/gcc10"
         container_name: gcc10
-        tty: true
-    gcc10-libs:
-        build:
-            context: gcc10_libs
-            dockerfile: Dockerfile
-        image: "uilianries/gcc10-libs"
-        container_name: gcc10-libs
         tty: true
