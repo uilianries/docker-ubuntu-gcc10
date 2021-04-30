@@ -61,8 +61,8 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    fail-fast: false
     strategy:
+      fail-fast: false
       matrix:
         version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
     steps:
