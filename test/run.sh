@@ -5,7 +5,7 @@ set -ex
 compiler=$1
 
 docker pull uilianries/${compiler}
-docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} uilianries/${compiler}
+docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} uilianries/test
 docker exec ${compiler} /tmp/project/test/run_test.sh
 
 docker stop ${compiler}

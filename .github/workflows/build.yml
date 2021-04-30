@@ -68,5 +68,6 @@ jobs:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
+        docker build -t uilianries/test --build-arg COMPILER=${{ matrix.version }} test/
         chmod +x test/run.sh
         test/run.sh ${{ matrix.version }}
