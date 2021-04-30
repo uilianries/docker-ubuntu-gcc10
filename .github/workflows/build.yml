@@ -38,6 +38,7 @@ jobs:
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
+  build:
     needs: conanfy
     runs-on: ubuntu-latest
     strategy:
