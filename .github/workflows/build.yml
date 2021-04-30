@@ -2,6 +2,7 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
+    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -19,6 +20,7 @@ jobs:
     - name: Docker Upload image uilianries/base
       run: docker push uilianries/base
   conanfy:
+    if: False
     needs: base
     runs-on: ubuntu-latest
     strategy:

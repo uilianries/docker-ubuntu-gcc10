@@ -17,7 +17,7 @@ RUN apt-get purge -y g++-multilib \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mv /tmp/install/bin/* /usr/local/bin \
-    && mv /tmp/install/lib /usr/local/lib \
+    && mv /tmp/install/lib/* /usr/local/lib \
     && mv /tmp/install/libexec /usr/local/libexec \
     && mv /tmp/install/include/c++/10.2.0/* /usr/local/include \
     && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
