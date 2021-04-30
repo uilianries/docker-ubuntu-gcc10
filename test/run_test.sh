@@ -9,6 +9,8 @@ conan --version
 
 export CONAN_USER_HOME=/tmp/project/test/conan/build
 
+sudo su
+
 conan config init --force
 conan install -r conan-center zlib/1.2.11@ --build
 conan install -r conan-center spdlog/1.8.5@ --build
