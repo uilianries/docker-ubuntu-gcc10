@@ -40,6 +40,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -59,7 +60,6 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test:
-    needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
