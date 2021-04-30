@@ -21,7 +21,6 @@ jobs:
       run: docker push uilianries/base
   conanfy:
     if: False
-    needs: base
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -41,7 +40,6 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build:
-    needs: conanfy
     runs-on: ubuntu-latest
     strategy:
       matrix:
