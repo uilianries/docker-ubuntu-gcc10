@@ -21,8 +21,9 @@ jobs:
     needs: base
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        version: [gcc8-conanfy, gcc9-conanfy, gcc10-conanfy]
+        version: [gcc5-conanfy, gcc6-conanfy, gcc7-conanfy, gcc8-conanfy, gcc9-conanfy, gcc10-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -41,8 +42,9 @@ jobs:
     needs: conanfy
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        version: [gcc10, gcc9, gcc8]
+        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -59,9 +61,10 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    fail-fast: false
     strategy:
       matrix:
-        version: [gcc10, gcc9, gcc8]
+        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
     steps:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}

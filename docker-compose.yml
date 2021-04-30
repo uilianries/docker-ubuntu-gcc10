@@ -9,6 +9,33 @@ services:
         image: "uilianries/base"
         container_name: base
         tty: true
+    gcc5-conanfy:
+        build:
+            context: conanfy
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 5.5.0
+        image: "uilianries/gcc5-conanfy"
+        container_name: gcc5_conan
+        tty: true
+    gcc6-conanfy:
+        build:
+            context: conanfy
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 6.5.0
+        image: "uilianries/gcc6-conanfy"
+        container_name: gcc6_conan
+        tty: true
+    gcc7-conanfy:
+        build:
+            context: conanfy
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 7.5.0
+        image: "uilianries/gcc7-conanfy"
+        container_name: gcc7_conan
+        tty: true
     gcc8-conanfy:
         build:
             context: conanfy
@@ -33,8 +60,35 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 10.3.0
-        image: "uilianries/gcc9-conanfy"
-        container_name: gcc9_conan
+        image: "uilianries/gcc10-conanfy"
+        container_name: gcc10_conan
+        tty: true
+    gcc5:
+        build:
+            context: final
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 5.5.0
+        image: "uilianries/gcc5"
+        container_name: gcc5
+        tty: true
+    gcc6:
+        build:
+            context: final
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 6.5.0
+        image: "uilianries/gcc6"
+        container_name: gcc6
+        tty: true
+    gcc7:
+        build:
+            context: final
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 7.5.0
+        image: "uilianries/gcc7"
+        container_name: gcc7
         tty: true
     gcc8:
         build:
