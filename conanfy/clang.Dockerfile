@@ -28,7 +28,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_INCLUDE_TESTS=OFF \
        -DLLVM_INCLUDE_GO_TESTS=OFF \
        -DLLVM_INCLUDE_DOCS=OFF \
-       -DLLVM_TARGETS_TO_BUILD=X86 \
+       -DBUILD_SHARED_LIBS=ON \
+       -DLLVM_TARGETS_TO_BUILD=HOST \
        -DLLVM_ENABLE_OCAMLDOC=OFF \
        -DLLVM_BUILD_DOCS=OFF \
        -DLLVM_OPTIMIZED_TABLEGEN=ON \
@@ -39,8 +40,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DCMAKE_CXX_COMPILER=clang++-4.0 \
        -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi" \
        -DLLVM_BUILD_32_BITS=OFF \
-    && cmake --build . --parallel 4 \
-    && cmake --build . --target install
+    && make -s \
+    && make install-cxx install-cxxabi
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
