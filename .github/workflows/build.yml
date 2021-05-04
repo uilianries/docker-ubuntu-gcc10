@@ -62,7 +62,6 @@ jobs:
         chmod +x test/run.sh
         test/run.sh ${{ matrix.version }}
   conanfy-clang:
-    needs: base
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
