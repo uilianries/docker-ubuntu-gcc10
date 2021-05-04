@@ -12,7 +12,7 @@ services:
     gcc5-conanfy:
         build:
             context: conanfy
-            dockerfile: Dockerfile
+            dockerfile: gcc.Dockerfile
             args:
                 GCC_VERSION: 5.5.0
         image: "uilianries/gcc5-conanfy"
@@ -21,7 +21,7 @@ services:
     gcc6-conanfy:
         build:
             context: conanfy
-            dockerfile: Dockerfile
+            dockerfile: gcc.Dockerfile
             args:
                 GCC_VERSION: 6.5.0
         image: "uilianries/gcc6-conanfy"
@@ -30,7 +30,7 @@ services:
     gcc7-conanfy:
         build:
             context: conanfy
-            dockerfile: Dockerfile
+            dockerfile: gcc.Dockerfile
             args:
                 GCC_VERSION: 7.5.0
         image: "uilianries/gcc7-conanfy"
@@ -39,7 +39,7 @@ services:
     gcc8-conanfy:
         build:
             context: conanfy
-            dockerfile: Dockerfile
+            dockerfile: gcc.Dockerfile
             args:
                 GCC_VERSION: 8.4.0
         image: "uilianries/gcc8-conanfy"
@@ -48,7 +48,7 @@ services:
     gcc9-conanfy:
         build:
             context: conanfy
-            dockerfile: Dockerfile
+            dockerfile: gcc.Dockerfile
             args:
                 GCC_VERSION: 9.3.0
         image: "uilianries/gcc9-conanfy"
@@ -57,15 +57,24 @@ services:
     gcc10-conanfy:
         build:
             context: conanfy
-            dockerfile: Dockerfile
+            dockerfile: gcc.Dockerfile
             args:
                 GCC_VERSION: 10.3.0
         image: "uilianries/gcc10-conanfy"
         container_name: gcc10_conan
         tty: true
+    clang11-conanfy:
+        build:
+            context: conanfy
+            dockerfile: clang.Dockerfile
+            args:
+                LLVM_VERSION: 11.1.0
+        image: "uilianries/clang11-conanfy"
+        container_name: clang11_conan
+        tty: true
     gcc5:
         build:
-            context: final
+            context: gcc
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 5.5.0
@@ -74,7 +83,7 @@ services:
         tty: true
     gcc6:
         build:
-            context: final
+            context: gcc
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 6.5.0
@@ -83,7 +92,7 @@ services:
         tty: true
     gcc7:
         build:
-            context: final
+            context: gcc
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 7.5.0
@@ -92,7 +101,7 @@ services:
         tty: true
     gcc8:
         build:
-            context: final
+            context: gcc
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 8.4.0
@@ -101,7 +110,7 @@ services:
         tty: true
     gcc9:
         build:
-            context: final
+            context: gcc
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 9.3.0
@@ -112,7 +121,7 @@ services:
           - base
     gcc10:
         build:
-            context: final
+            context: gcc
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 10.3.0

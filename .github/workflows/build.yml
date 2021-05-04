@@ -2,10 +2,11 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
+    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Build GCC Base Image
+    - name: Build Docker Base Image
       run: |
         docker-compose build --pull base
     - name: Inspect Docker image uilianries/base
@@ -14,8 +15,8 @@ jobs:
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/base
       run: docker push uilianries/base
-  conanfy:
-    needs: base
+  conanfy-gcc:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -29,8 +30,8 @@ jobs:
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
-  build:
-    needs: conanfy
+  build-gcc:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -46,8 +47,8 @@ jobs:
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
-  test:
-    needs: build
+  test-gcc:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -60,3 +61,18 @@ jobs:
         docker build -t uilianries/test --build-arg COMPILER=${{ matrix.version }} test/
         chmod +x test/run.sh
         test/run.sh ${{ matrix.version }}
+  conanfy-clang:
+    needs: base
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [clang11-conanfy]
+    steps:
+    - uses: actions/checkout@master
+    - name: Build ${{ matrix.version }}
+      run: docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
+    - name: Docker login
+      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+    - name: Docker Upload image uilianries/${{ matrix.version }}
+      run: docker push uilianries/${{ matrix.version }}
