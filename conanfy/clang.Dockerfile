@@ -41,7 +41,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_BUILD_TOOLS=OFF \
        -DCMAKE_C_COMPILER=clang-4.0 \
        -DCMAKE_CXX_COMPILER=clang++-4.0 \
-       -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi" \
+       -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi;clang" \
        -DLLVM_BUILD_32_BITS=OFF \
     && make -s \
     && make install-cxx install-cxxabi
