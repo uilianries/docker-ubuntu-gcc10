@@ -35,7 +35,10 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_OPTIMIZED_TABLEGEN=ON \
        -DCLANG_INCLUDE_TESTS=OFF \
        -DLIBCXX_INCLUDE_TESTS=OFF \
+       -DLIBCXX_ENABLE_SHARED=YES \
+       -DLIBCXX_ENABLE_STATIC=NO \
        -DCLANG_BUILD_EXAMPLES=OFF \
+       -DLLVM_BUILD_TOOLS=OFF \
        -DCMAKE_C_COMPILER=clang-4.0 \
        -DCMAKE_CXX_COMPILER=clang++-4.0 \
        -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi" \
