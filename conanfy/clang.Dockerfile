@@ -8,7 +8,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 COPY conanfile.py .
 
 RUN sudo apt-get -qq update \
-    && sudo apt-get -q install -y clang --no-install-recommends --no-install-suggests \
+    && sudo apt-get -q install -y clang-4.0 --no-install-recommends --no-install-suggests \
     && sudo rm -rf /var/lib/apt/lists/*
 
 RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
@@ -35,8 +35,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DCLANG_INCLUDE_TESTS=OFF \
        -DLIBCXX_INCLUDE_TESTS=OFF \
        -DCLANG_BUILD_EXAMPLES=OFF \
-       -DCMAKE_C_COMPILER=clang \
-       -DCMAKE_CXX_COMPILER=clang++ \
+       -DCMAKE_C_COMPILER=clang-4.0 \
+       -DCMAKE_CXX_COMPILER=clang++-4.0 \
        -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi" \
        -DLLVM_BUILD_32_BITS=OFF \
     && cmake --build . --parallel 4 \
