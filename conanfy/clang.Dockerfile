@@ -36,7 +36,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_BUILD_TEST=OFF \
        -DLLVM_OPTIMIZED_TABLEGEN=ON \
        -DLLVM_BUILD_TOOLS=OFF \
-       -DLLVM_ENABLE_PROJECTS=clang \
+       -DLLVM_ENABLE_PROJECTS="libcxx;clang" \
        -DLLVM_BUILD_32_BITS=OFF \
        -DLLVM_USE_SANITIZER=OFF \
 
@@ -57,9 +57,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXX_DEBUG_BUILD=OFF \
 
     && make -s cxx \
-    && make -s cxxabi \
     && make -s clang \
-    && make install-cxx install-cxxabi install-clang
+    && make install-cxx install-clang
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
