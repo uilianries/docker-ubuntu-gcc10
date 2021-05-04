@@ -68,7 +68,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
 
     && cmake --build . --target cxxabi \
     && cmake --build . --target cxx \
-    && cmake --build . --target clang --parallel \
+    && cmake --build . --target clang \
     && cmake --build . --target install-cxxabi install-cxx install-clang
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
