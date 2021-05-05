@@ -13,7 +13,7 @@ RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/loca
 
 USER root
 
-RUN apt-get purge -y g++-multilib \
+RUN apt-get purge -y g++-multilib gcc \
     && apt-get autoremove -y \
     && apt-get autoclean \
     && apt-get update \

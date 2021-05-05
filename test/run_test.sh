@@ -6,6 +6,8 @@ python --version
 pip --version
 cmake --version
 conan --version
+cpp --version
+cc --version
 
 export CONAN_USER_HOME=/tmp/project/test/conan/build
 
