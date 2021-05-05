@@ -40,7 +40,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_ENABLE_WARNINGS=OFF \
        -DLLVM_ENABLE_PEDANTIC=OFF \
        -DLLVM_ENABLE_ASSERTIONS=OFF \
-       -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" \
+       -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld" \
        -DLLVM_BUILD_DOCS=OFF \
        -DLLVM_BUILD_TESTS=OFF \
        -DLLVM_BUILD_32_BITS=OFF \
@@ -75,6 +75,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && ninja cxxabi \
     && ninja cxx \
     && ninja clang \
+    && ninja lld \
     && ninja install-cxxabi install-cxx install-clang install-lld \
     && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib  -name "*.so*") /tmp/install/lib/
 
