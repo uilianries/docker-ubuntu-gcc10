@@ -64,12 +64,11 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_INCLUDE_TESTS=OFF \
        -DLIBCXXABI_ENABLE_SHARED=ON \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
-
-
     && cmake --build . --target cxxabi \
     && cmake --build . --target cxx \
     && cmake --build . --target clang \
-    && cmake --build . --target install-cxxabi install-cxx install-clang
+    && cmake --build . --target install-cxxabi install-cxx install-clang \
+    && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib  -name "*.so*") /tmp/install/lib/
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr

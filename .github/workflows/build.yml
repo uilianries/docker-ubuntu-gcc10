@@ -62,6 +62,7 @@ jobs:
         chmod +x test/run.sh
         test/run.sh ${{ matrix.version }}
   conanfy-clang:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -75,3 +76,33 @@ jobs:
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
+  build-clang:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [clang11]
+    steps:
+    - uses: actions/checkout@master
+    - name: Build ${{ matrix.version }}
+      run: docker-compose build ${{ matrix.version }}
+    - name: Inspect Docker image uilianries/${{ matrix.version }}
+      run: docker inspect uilianries/${{ matrix.version }}
+    - name: Docker login
+      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+    - name: Docker Upload image uilianries/${{ matrix.version }}
+      run: docker push uilianries/${{ matrix.version }}
+  test-clang:
+    needs: build-clang
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [clang11]
+    steps:
+    - uses: actions/checkout@master
+    - name: Test ${{ matrix.version }}
+      run: |
+        docker build -t uilianries/test --build-arg COMPILER=${{ matrix.version }} test/
+        chmod +x test/run.sh
+        test/run.sh ${{ matrix.version }}

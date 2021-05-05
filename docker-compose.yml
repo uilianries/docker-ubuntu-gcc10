@@ -128,3 +128,12 @@ services:
         image: "uilianries/gcc10"
         container_name: gcc10
         tty: true
+    clang11:
+        build:
+            context: clang
+            dockerfile: Dockerfile
+            args:
+                LLVM_VERSION: 11.1.0
+        image: "uilianries/clang11"
+        container_name: clang11
+        tty: true
