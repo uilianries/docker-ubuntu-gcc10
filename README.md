@@ -1,11 +1,17 @@
-#### How does it work?
+### How does it work?
 
-There are 3 images, but only 1 matters.
+There are 3 images (base, conanfy, final), but only 1 matters.
+
+### Base
 
 First, we build uilianries/base (based on Xenial), which is a complete docker image,
 with conan, cmake, apt packages, python, jfrog cli, and most important
 libstdc++.so.0.6.28. That library is created by GCC10, so we build gcc,
 and copy only lib64 folder to /usr/local
+
+### Conanfy
+
+#### GCC
 
 Second, we create conanfy images (based on Base). It's binary packaging of
 any compiler version, we build a gcc version and package all artifacts into
@@ -26,8 +32,24 @@ default.
 
 The glibc version keeps the from system.
 
-#### Testing
+#### Clang
+
+Unlike GCC, Clang takes +1h to be built, so it's being added in parts.
+
+First, we build uilianries/base (based on Xenial), which is a complete docker image,
+with conan, cmake, apt packages, python, jfrog cli, and most important
+libstdc++.so.0.6.28. That library is created by GCC10, so we build gcc,
+and copy only lib64 folder to /usr/local
+
+
+
+### Testing
 
 To validate all, we build Zlib and Spdlog from sources and link to example apps.
 So, we run a vanilla Ubuntu Xenial container, copy those apps, the newer
 libstdc++ and execute them.
+
+
+### LICENSE
+
+[MIT](LICENSE)

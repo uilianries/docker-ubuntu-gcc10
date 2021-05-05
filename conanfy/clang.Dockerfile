@@ -34,13 +34,12 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_INCLUDE_TOOLS=ON \
        -DLLVM_INCLUDE_UTILS=OFF \
        -DLLVM_INCLUDE_BENCHMARKS=OFF \
-       -DLLVM_TARGETS_TO_BUILD=X86 \
+       -DLLVM_TARGETS_TO_BUILD=host \
        -DLLVM_ENABLE_OCAMLDOC=OFF \
        -DLLVM_ENABLE_BACKTRACES=OFF \
        -DLLVM_ENABLE_WARNINGS=OFF \
        -DLLVM_ENABLE_PEDANTIC=OFF \
        -DLLVM_ENABLE_ASSERTIONS=OFF \
-       -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld" \
        -DLLVM_BUILD_DOCS=OFF \
        -DLLVM_BUILD_TESTS=OFF \
        -DLLVM_BUILD_32_BITS=OFF \
@@ -72,12 +71,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_INCLUDE_TESTS=OFF \
        -DLIBCXXABI_ENABLE_SHARED=ON \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
-    && ninja cxxabi \
-    && ninja cxx \
-    && ninja clang \
-    && ninja lld \
-    && ninja install-cxxabi install-cxx install-clang install-lld \
-    && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib  -name "*.so*") /tmp/install/lib/
+    && ninja -j $(nproc) \
+    && ninja install
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
