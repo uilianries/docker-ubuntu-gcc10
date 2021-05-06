@@ -34,13 +34,13 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_INCLUDE_TOOLS=ON \
        -DLLVM_INCLUDE_UTILS=OFF \
        -DLLVM_INCLUDE_BENCHMARKS=OFF \
-       -DLLVM_TARGETS_TO_BUILD=host \
+       -DLLVM_TARGETS_TO_BUILD=X86 \
        -DLLVM_ENABLE_OCAMLDOC=OFF \
        -DLLVM_ENABLE_BACKTRACES=OFF \
        -DLLVM_ENABLE_WARNINGS=OFF \
        -DLLVM_ENABLE_PEDANTIC=OFF \
        -DLLVM_ENABLE_ASSERTIONS=OFF \
-       -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld;compiler-rt" \
+       -DLLVM_ENABLE_PROJECTS="libunwind;clang;libcxx;libcxxabi;lld;compiler-rt" \
        -DLLVM_BUILD_DOCS=OFF \
        -DLLVM_BUILD_TESTS=OFF \
        -DLLVM_BUILD_32_BITS=OFF \
@@ -52,12 +52,19 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_USE_SANITIZER=OFF \
        -DLLVM_USE_LINKER=lld-4.0 \
        -DLLVM_OPTIMIZED_TABLEGEN=ON \
+       -DLIBUNWIND_ENABLE_ASSERTIONS=OFF \
+       -DLIBUNWIND_ENABLE_PEDANTIC=OFF \
+       -DLIBUNWIND_ENABLE_SHARED=ON \
+       -DLIBUNWIND_ENABLE_STATIC=OFF \
+       -DLIBUNWIND_USE_COMPILER_RT=ON \
        -DCLANG_INCLUDE_TESTS=OFF \
        -DCLANG_ENABLE_ARCMT=OFF \
        -DCLANG_ENABLE_STATIC_ANALYZER=OFF \
        -DCLANG_INCLUDE_DOCS=OFF \
        -DCLANG_BUILD_EXAMPLES=OFF \
        -DCLANG_ENABLE_BOOTSTRAP=OFF \
+       -DCLANG_DEFAULT_RTLIB=compiler-rt \
+       -DCLANG_DEFAULT_UNWINDLIB=libunwind \
        -DLIBCXX_INCLUDE_TESTS=OFF \
        -DLIBCXX_ENABLE_SHARED=YES \
        -DLIBCXX_ENABLE_STATIC=OFF \
@@ -65,6 +72,9 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXX_INCLUDE_DOCS=OFF \
        -DLIBCXX_GENERATE_COVERAGE=OFF \
        -DLIBCXX_BUILD_32_BITS=OFF \
+       -DLIBCXX_CXX_ABI=libcxxabi \
+       -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=OFF \
+       -DLIBCXX_USE_COMPILER_RT=ON \
        -DLIBCXX_DEBUG_BUILD=OFF \
        -DLIBCXXABI_ENABLE_ASSERTIONS=OFF \
        -DLIBCXXABI_ENABLE_PEDANTIC=OFF \
@@ -72,12 +82,23 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_INCLUDE_TESTS=OFF \
        -DLIBCXXABI_ENABLE_SHARED=ON \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
+       -DLIBCXXABI_USE_COMPILER_RT=ON \
+       -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
+       -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=OFF \
+       -DCOMPILER_RT_INCLUDE_TESTS=OFF \
+       -DCOMPILER_RT_USE_LIBCXX=ON
+    && ninja unwind \
     && ninja cxxabi \
     && ninja cxx \
     && ninja clang \
     && ninja lld \
     && ninja compiler-rt \
-    && ninja install-cxxabi install-cxx install-clang install-lld install-compiler-rt
+    && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt
+
+RUN cp -a llvm-project-llvmorg-11.1.0/build/lib/clang/11.1.0/include /tmp/install/lib/clang/11.1.0/include \
+    && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib -name "*.so*") /tmp/install/lib
+
+# TODO: Require libstdc++-5-dev because libstdc++ headers
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
