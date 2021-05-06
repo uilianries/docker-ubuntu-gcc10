@@ -74,12 +74,12 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_ENABLE_SHARED=ON \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
        -DLIBCXXABI_USE_COMPILER_RT=ON \
-    && ninja libcxxabi \
-    && ninja libcxx \
-    && ninja libclang \
+    && ninja cxxabi \
+    && ninja cxx \
+    && ninja clang \
     && ninja lld \
     && ninja compiler-rt \
-    && ninja install-libcxxabi install-libcxx install-libclang install-lld install-compiler-rt
+    && ninja install-cxxabi install-cxx install-clang install-lld install-compiler-rt
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
