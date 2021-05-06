@@ -40,6 +40,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLLVM_ENABLE_WARNINGS=OFF \
        -DLLVM_ENABLE_PEDANTIC=OFF \
        -DLLVM_ENABLE_ASSERTIONS=OFF \
+       -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld;compiler-rt"
        -DLLVM_BUILD_DOCS=OFF \
        -DLLVM_BUILD_TESTS=OFF \
        -DLLVM_BUILD_32_BITS=OFF \
@@ -65,13 +66,15 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXX_GENERATE_COVERAGE=OFF \
        -DLIBCXX_BUILD_32_BITS=OFF \
        -DLIBCXX_DEBUG_BUILD=OFF \
+       -DLIBCXX_USE_COMPILER_RT=ON \
        -DLIBCXXABI_ENABLE_ASSERTIONS=OFF \
        -DLIBCXXABI_ENABLE_PEDANTIC=OFF \
        -DLIBCXXABI_BUILD_32_BITS=OFF \
        -DLIBCXXABI_INCLUDE_TESTS=OFF \
        -DLIBCXXABI_ENABLE_SHARED=ON \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
-    && ninja -j $(nproc) \
+       -DLIBCXXABI_USE_COMPILER_RT=ON \
+    && ninja \
     && ninja install
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
