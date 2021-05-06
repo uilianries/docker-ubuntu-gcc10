@@ -86,7 +86,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
        -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=OFF \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
-       -DCOMPILER_RT_USE_LIBCXX=ON
+       -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \
     && ninja cxxabi \
     && ninja cxx \
