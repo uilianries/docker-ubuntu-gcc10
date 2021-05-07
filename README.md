@@ -11,12 +11,13 @@ and copy only lib64 folder to /usr/local
 
 ### Conanfy
 
-#### GCC
-
 Second, we create conanfy images (based on Base). It's binary packaging of
 any compiler version, we build a gcc version and package all artifacts into
-a conan package. The conan is uploaded to uilianr.jfrog.io. The compiler used
-to build gcc from sources is the native gcc5.
+a conan package. The conan is uploaded to uilianr.jfrog.io.
+
+#### GCC
+
+The compiler used to build gcc from sources is the native gcc5.
 
 As final step, we clue Base docker image with compiler artifacts from Conan,
 remove the native gcc5 from system and copy all compiler header and libraries
@@ -40,7 +41,6 @@ First, we build uilianries/base (based on Xenial), which is a complete docker im
 with conan, cmake, apt packages, python, jfrog cli, and most important
 libstdc++.so.0.6.28. That library is created by GCC10, so we build gcc,
 and copy only lib64 folder to /usr/local
-
 
 
 ### Testing

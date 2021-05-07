@@ -41,7 +41,7 @@ RUN apt-get -qq update \
 RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
     && tar Jxf gcc-${GCC_VERSION}.tar.xz \
     && cd gcc-${GCC_VERSION} \
-    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/install \
+    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/base \
     && make -j2 \
     && make install-strip \
     && rm -rf /root/gcc-${GCC_VERSION}.tar.xz /root/gcc-${GCC_VERSION}
@@ -88,9 +88,8 @@ RUN chown -R conan:1001 /opt/pyenv \
 RUN pip install -q --upgrade --no-cache-dir pip \
     pip install -q --no-cache-dir conan conan-package-tools
 
-RUN mv /tmp/install/lib64 /usr/local \
-    && mv /tmp/install/include /usr/local \
-    && rm -rf /tmp/install \
+RUN mv /tmp/base/lib64 /usr/local \
+    && mv /tmp/base/include /usr/local \
     && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \

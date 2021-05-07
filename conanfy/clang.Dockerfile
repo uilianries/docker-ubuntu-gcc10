@@ -11,9 +11,6 @@ RUN sudo apt-get -qq update \
     && sudo apt-get -q install -y clang-4.0 lld-4.0 --no-install-recommends --no-install-suggests \
     && pip install ninja
 
-RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
-    && conan user -r uilianr -p ${CONAN_PASSWORD} ${CONAN_LOGIN_USERNAME}
-
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
 
@@ -84,7 +81,6 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
        -DLIBCXXABI_USE_COMPILER_RT=ON \
        -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
-       -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=OFF \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
        -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \
@@ -98,5 +94,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
 RUN cp -a llvm-project-llvmorg-11.1.0/build/lib/clang/11.1.0/include /tmp/install/lib/clang/11.1.0/include \
     && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib -name "*.so*") /tmp/install/lib
 
-RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
-    && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
+RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
+    && conan user -r uilianr -p ${CONAN_PASSWORD} ${CONAN_LOGIN_USERNAME} \
+    && conan create . clang/${LLVM_VERSION}@uilianries/stable \
+    && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr \
+    && conan user -c
