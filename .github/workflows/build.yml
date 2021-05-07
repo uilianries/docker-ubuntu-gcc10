@@ -61,7 +61,7 @@ jobs:
         chmod +x test/run.sh
         test/run.sh ${{ matrix.version }}
   conanfy-clang:
-    if: False
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -76,7 +76,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build-clang:
-    if: False
+    needs: conanfy-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -92,7 +92,7 @@ jobs:
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
-  test-clang:
+  build-clang:
     if: False
     runs-on: ubuntu-latest
     strategy:
