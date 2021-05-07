@@ -89,7 +89,7 @@ RUN pip install -q --upgrade --no-cache-dir pip \
     pip install -q --no-cache-dir conan conan-package-tools
 
 RUN mv /tmp/base/lib64 /usr/local \
-    && mv /tmp/base/include /usr/local \
+    && mv /tmp/base/include/c++/${GCC_VERSION}/* /usr/local/include \
     && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
