@@ -55,7 +55,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBUNWIND_ENABLE_ASSERTIONS=OFF \
        -DLIBUNWIND_ENABLE_PEDANTIC=OFF \
        -DLIBUNWIND_ENABLE_SHARED=ON \
-       -DLIBUNWIND_ENABLE_STATIC=OFF \
+       -DLIBUNWIND_ENABLE_STATIC=ON \
        -DLIBUNWIND_USE_COMPILER_RT=ON \
        -DCLANG_INCLUDE_TESTS=OFF \
        -DCLANG_ENABLE_ARCMT=OFF \
@@ -84,7 +84,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
        -DLIBCXXABI_USE_COMPILER_RT=ON \
        -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
-       -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=OFF \
+       -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=ON \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
        -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \
@@ -97,8 +97,6 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
 
 RUN cp -a llvm-project-llvmorg-11.1.0/build/lib/clang/11.1.0/include /tmp/install/lib/clang/11.1.0/include \
     && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib -name "*.so*") /tmp/install/lib
-
-# TODO: Require libstdc++-5-dev because libstdc++ headers
 
 RUN conan create . clang/${LLVM_VERSION}@uilianries/stable \
     && conan upload --all clang/${LLVM_VERSION}@uilianries/stable -r uilianr
