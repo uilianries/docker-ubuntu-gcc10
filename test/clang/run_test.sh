@@ -21,7 +21,7 @@ pushd /tmp/project/test/clang/conan/build
 conan create .. foo/0.1@user/testing
 conan install foo/0.1@user/testing -g deploy
 
-ldd bin/foobar | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6'
-ldd bin/foobar | grep 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so.1'
-
-cp /usr/local/lib64/libstdc++.so.6.0.28 .
+ldd bin/foobar | grep 'libc++.so.1 => /usr/local/lib/libc++.so.1'
+ldd bin/foobar | grep 'libunwind.so.1 => /usr/local/lib/libunwind.so.1'
+ldd bin/foobar | grep 'libc++abi.so.1 => /usr/local/lib/libc++abi.so.1'
+ldd bin/foobar | grep -v 'libgcc'
