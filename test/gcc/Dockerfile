@@ -1,0 +1,5 @@
+ARG COMPILER
+
+FROM uilianries/${COMPILER}
+
+USER root

@@ -57,9 +57,9 @@ jobs:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
-        docker build -t uilianries/test --build-arg COMPILER=${{ matrix.version }} test/
-        chmod +x test/run.sh
-        test/run.sh ${{ matrix.version }}
+        docker build -t uilianries/gcc-test --build-arg COMPILER=${{ matrix.version }} test/gcc
+        chmod +x test/gcc/run.sh
+        test/gcc/run.sh ${{ matrix.version }}
   conanfy-clang:
     needs: base
     runs-on: ubuntu-latest
@@ -103,6 +103,6 @@ jobs:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
-        docker build -t uilianries/test --build-arg COMPILER=${{ matrix.version }} test/
-        chmod +x test/run.sh
-        test/run.sh ${{ matrix.version }}
+        docker build -t uilianries/clang-test --build-arg COMPILER=${{ matrix.version }} test/clang
+        chmod +x test/clang/run.sh
+        test/clang/run.sh ${{ matrix.version }}
