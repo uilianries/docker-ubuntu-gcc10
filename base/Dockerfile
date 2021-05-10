@@ -90,7 +90,10 @@ RUN pip install -q --upgrade --no-cache-dir pip \
 
 RUN mv /tmp/base/lib64 /usr/local \
     && mv /tmp/base/include/* /usr/local/include \
-    && printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
+    && mv /tmp/base/lib/gcc /usr/local/lib \
+    && rm -rf /tmp/base
+
+RUN printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && mv /etc/ld.so.conf.d/libc.conf /etc/ld.so.conf.d/10libc.conf \

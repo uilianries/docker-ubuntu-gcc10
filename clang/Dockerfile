@@ -22,7 +22,6 @@ RUN apt-get purge -y g++-multilib gcc \
 RUN mv /tmp/install/bin/* /usr/local/bin \
     && mv /tmp/install/lib/* /usr/local/lib \
     && cp -a /tmp/install/include/* /usr/local/include \
-    # && cp -a /usr/local/include/x86_64-linux-gnu/bits/* /usr/local/include/bits \
     && update-alternatives --install /usr/bin/cc cc /usr/local/bin/clang 100 \
     && update-alternatives --install /usr/bin/cpp ccp /usr/local/bin/clang++ 100 \
     && update-alternatives --install /usr/bin/ld ld /usr/local/bin/ld.lld 100 \
