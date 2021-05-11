@@ -85,6 +85,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
        -DLIBCXX_CXX_ABI_INCLUDE_PATHS=/usr/include/libcxxabi \
        -DLIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL=ON \
+       -DLIBCXXABI_LIBUNWIND_SOURCES=../../libunwind/src \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
        -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \
