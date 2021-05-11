@@ -11,9 +11,6 @@ RUN sudo apt-get -qq update \
     && sudo apt-get -q install -y clang-4.0 lld-4.0 --no-install-recommends --no-install-suggests \
     && pip install ninja
 
-RUN sudo ln -s /usr/include/libcxxabi/__cxxabi_config.h /usr/include/c++/v1/__cxxabi_config.h \
-    && sudo ln -s /usr/include/libcxxabi/cxxabi.h /usr/include/c++/v1/cxxabi.h
-
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
 
