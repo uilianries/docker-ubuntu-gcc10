@@ -8,7 +8,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 COPY conanfile.py .
 
 RUN sudo apt-get -qq update \
-    && sudo apt-get -q install -y clang-4.0 lld-4.0 libcxxabi-dev --no-install-recommends --no-install-suggests \
+    && sudo apt-get -q install -y clang-4.0 lld-4.0 libc++abi-dev --no-install-recommends --no-install-suggests \
     && pip install ninja
 
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
