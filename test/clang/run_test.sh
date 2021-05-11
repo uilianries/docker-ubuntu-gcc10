@@ -26,6 +26,10 @@ ldd bin/foobar | grep 'libunwind.so.1 => /usr/local/lib/libunwind.so.1'
 ldd bin/foobar | grep 'libc++abi.so.1 => /usr/local/lib/libc++abi.so.1'
 ldd bin/foobar | grep -v 'libgcc'
 
+mv bin/foobar bin/foobar_clang
+mv bin/foobar_c bin/foobar_c_clang
+cp /usr/local/lib64/libstdc++.so.6.0.28 bin/libstdc++.so.6.0.28
+
 conan profile update settings.compiler.libcxx=libstdc++ default
 
 conan install -r conan-center zlib/1.2.11@ --build

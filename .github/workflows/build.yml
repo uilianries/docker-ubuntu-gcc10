@@ -2,6 +2,7 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
+    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -61,7 +62,7 @@ jobs:
         chmod +x test/gcc/run.sh
         test/gcc/run.sh ${{ matrix.version }}
   conanfy-clang:
-    needs: base
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -76,7 +77,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build-clang:
-    needs: conanfy-clang
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -93,7 +94,6 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test-clang:
-    needs: build-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
