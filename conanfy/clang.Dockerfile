@@ -11,6 +11,9 @@ RUN sudo apt-get -qq update \
     && sudo apt-get -q install -y clang-4.0 lld-4.0 --no-install-recommends --no-install-suggests \
     && pip install ninja
 
+RUN sudo ln -s /usr/include/libcxxabi/__cxxabi_config.h /usr/include/c++/v1/__cxxabi_config.h \
+    && sudo ln -s /usr/include/libcxxabi/cxxabi.h /usr/include/c++/v1/cxxabi.h
+
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
 
@@ -22,6 +25,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DCMAKE_CXX_COMPILER=clang++-4.0 \
        -DCMAKE_C_COMPILER=clang-4.0 \
        -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
        -DBUILD_SHARED_LIBS=ON \
        -DCMAKE_INSTALL_PREFIX=/tmp/install \
        -DLLVM_INCLUDE_EXAMPLES=OFF \
@@ -73,6 +77,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=OFF \
        -DLIBCXX_USE_COMPILER_RT=ON \
        -DLIBCXX_DEBUG_BUILD=OFF \
+       -DLIBCXX_LIBCXXABI_INCLUDES_INTERNAL=ON \
        -DLIBCXXABI_ENABLE_ASSERTIONS=OFF \
        -DLIBCXXABI_ENABLE_PEDANTIC=OFF \
        -DLIBCXXABI_BUILD_32_BITS=OFF \
@@ -81,6 +86,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
        -DLIBCXXABI_USE_COMPILER_RT=ON \
        -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
+       -DLIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL=ON \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
        -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \

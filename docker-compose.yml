@@ -72,6 +72,15 @@ services:
         image: "uilianries/clang4-conanfy"
         container_name: clang4_conan
         tty: true
+    clang5-conanfy:
+        build:
+            context: conanfy
+            dockerfile: clang.Dockerfile
+            args:
+                LLVM_VERSION: 5.0.2
+        image: "uilianries/clang5-conanfy"
+        container_name: clang5_conan
+        tty: true
     clang11-conanfy:
         build:
             context: conanfy
@@ -145,6 +154,15 @@ services:
                 LLVM_VERSION: 4.0.1
         image: "uilianries/clang4"
         container_name: clang4
+        tty: true
+    clang5:
+        build:
+            context: clang
+            dockerfile: Dockerfile
+            args:
+                LLVM_VERSION: 5.0.2
+        image: "uilianries/clang5"
+        container_name: clang5
         tty: true
     clang11:
         build:

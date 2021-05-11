@@ -8,7 +8,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Build Docker Base Image
       run: |
-        docker-compose build --pull base
+        docker-compose pull base
+        docker-compose build base
     - name: Inspect Docker image uilianries/base
       run: docker inspect uilianries/base
     - name: Docker login
@@ -25,7 +26,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
-      run: docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
+      run: |
+        docker-compose pull ${{ matrix.version }}
+        docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
     - name: Docker login
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
@@ -40,7 +43,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
-      run: docker-compose build ${{ matrix.version }}
+      run: |
+        docker-compose pull ${{ matrix.version }}
+        docker-compose build ${{ matrix.version }}
     - name: Inspect Docker image uilianries/${{ matrix.version }}
       run: docker inspect uilianries/${{ matrix.version }}
     - name: Docker login
@@ -70,7 +75,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
-      run: docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
+      run: |
+        docker-compose pull ${{ matrix.version }}
+        docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
     - name: Docker login
       run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image uilianries/${{ matrix.version }}
@@ -85,7 +92,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
-      run: docker-compose build ${{ matrix.version }}
+      run: |
+        docker pull ${{ matrix.version }}
+        docker-compose build ${{ matrix.version }}
     - name: Inspect Docker image uilianries/${{ matrix.version }}
       run: docker inspect uilianries/${{ matrix.version }}
     - name: Docker login
