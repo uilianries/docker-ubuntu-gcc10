@@ -63,6 +63,15 @@ services:
         image: "uilianries/gcc10-conanfy"
         container_name: gcc10_conan
         tty: true
+    clang4-conanfy:
+        build:
+            context: conanfy
+            dockerfile: clang.Dockerfile
+            args:
+                LLVM_VERSION: 4.0.1
+        image: "uilianries/clang4-conanfy"
+        container_name: clang4_conan
+        tty: true
     clang11-conanfy:
         build:
             context: conanfy
@@ -127,6 +136,15 @@ services:
                 GCC_VERSION: 10.3.0
         image: "uilianries/gcc10"
         container_name: gcc10
+        tty: true
+    clang4:
+        build:
+            context: clang
+            dockerfile: Dockerfile
+            args:
+                LLVM_VERSION: 4.0.1
+        image: "uilianries/clang4"
+        container_name: clang4
         tty: true
     clang11:
         build:

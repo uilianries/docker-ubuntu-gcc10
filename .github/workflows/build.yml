@@ -62,12 +62,11 @@ jobs:
         chmod +x test/gcc/run.sh
         test/gcc/run.sh ${{ matrix.version }}
   conanfy-clang:
-    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang11-conanfy]
+        version: [clang4-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -77,12 +76,12 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build-clang:
-    if: False
+    needs: conanfy-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang11]
+        version: [clang4]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -94,11 +93,12 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test-clang:
+    needs: build-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang11]
+        version: [clang4]
     steps:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
