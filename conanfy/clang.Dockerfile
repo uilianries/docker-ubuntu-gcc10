@@ -94,9 +94,10 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && ninja clang \
     && ninja lld \
     && ninja compiler-rt \
-    && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt
+    && ninja install-cxxabi install-cxx install-clang install-lld install-compiler-rt
 
-RUN cp -a llvm-project-llvmorg-11.1.0/build/lib/clang/11.1.0/include /tmp/install/lib/clang/11.1.0/include \
+RUN cp -a llvm-project-llvmorg-11.1.0/build/lib/lib/libunwind.* /tmp/install/lib \
+    && cp -a llvm-project-llvmorg-11.1.0/build/lib/clang/11.1.0/include /tmp/install/lib/clang/11.1.0/include \
     && cp $(find /home/conan/llvm-project-llvmorg-11.1.0/build/lib -name "*.so*") /tmp/install/lib
 
 RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
