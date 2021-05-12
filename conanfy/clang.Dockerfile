@@ -96,7 +96,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && ninja compiler-rt \
     && ninja install-cxxabi install-cxx install-clang install-lld install-compiler-rt
 
-RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/lib/libunwind.* /tmp/install/lib \
+RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/libunwind.* /tmp/install/lib \
     && cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
     && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib
 
