@@ -71,7 +71,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [clang4-conanf, clang11-conanfy]
+        version: [clang4-conanfy, clang11-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
