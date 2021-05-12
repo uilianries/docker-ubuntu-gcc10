@@ -71,7 +71,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [clang4-conanfy, clang5-conanfy, clang11-conanfy]
+        version: [clang4-conanfy, clang5-conanfy, clang6-conanfy, clang7-conanfy, clang8-conanfy, clang9-conanfy, clang10-conanfy, clang11-conanfy, clang12-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -88,7 +88,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [clang4, clang5, clang11]
+        version: [clang4, clang5, clang6, clang7, clang8, clang9, clang10, clang11, clang12]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -105,7 +105,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [clang4, clang11]
+        version: [clang4, clang5, clang6, clang7, clang8, clang9, clang10, clang11, clang12]
     steps:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
