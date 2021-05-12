@@ -67,12 +67,11 @@ jobs:
         chmod +x test/gcc/run.sh
         test/gcc/run.sh ${{ matrix.version }}
   conanfy-clang:
-    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang4-conanfy, clang11-conanfy]
+        version: [clang4-conanfy, clang5-conanfy, clang11-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -89,7 +88,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [clang4, clang11]
+        version: [clang4, clang5, clang11]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
