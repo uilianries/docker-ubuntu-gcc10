@@ -84,13 +84,13 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build-clang:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         version: [clang4, clang11]
     steps:
-      if: False
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
       run: |
