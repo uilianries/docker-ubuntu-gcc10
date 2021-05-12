@@ -90,6 +90,7 @@ jobs:
       matrix:
         version: [clang4, clang11]
     steps:
+      if: False
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
       run: |
@@ -101,7 +102,6 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test-clang:
-    needs: build-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

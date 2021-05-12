@@ -28,7 +28,9 @@ ldd bin/foobar | grep -v 'libgcc'
 
 mv bin/foobar bin/foobar_clang
 mv bin/foobar_c bin/foobar_c_clang
+
 cp /usr/local/lib64/libstdc++.so.6.0.28 bin/libstdc++.so.6.0.28
+cp /usr/local/lib/libunwind.so.1.0 bin/libunwind.so.1.0
 
 conan profile update settings.compiler.libcxx=libstdc++ default
 

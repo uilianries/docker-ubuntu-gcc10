@@ -17,14 +17,16 @@ docker rm ${compiler}
 # Mount Vanilla Ubuntu Xenial and run executables built with libstdc++.so.0.6.28
 docker run -t -d -v ${PWD}:/tmp/project --name ubuntu ubuntu:xenial
 docker exec ubuntu apt-get -qq update
-docker exec ubuntu apt-get -qq install -y libc++-dev libunwind-dev libc++abi-dev --no-install-recommends --no-install-suggests
-docker exec ubuntu ln -s /usr/lib/x86_64-linux-gnu/libunwind.so /usr/lib/x86_64-linux-gnu/libunwind.so.1
+docker exec ubuntu apt-get -qq install -y libc++-dev libc++abi-dev --no-install-recommends --no-install-suggests
+
+docker exec -w /tmp/project/test/clang/conan/build ubuntu cp bin/libunwind.so.1.0 /usr/lib/x86_64-linux-gnu/libunwind.so.1
 
 docker exec -w /tmp/project/test/clang/conan/build ubuntu bin/foobar_clang
 docker exec -w /tmp/project/test/clang/conan/build ubuntu bin/foobar_c_clang
 
 # Default Xenial libstdc++ is too old, foobar requires GLIBCXX_3.4.22
 docker exec -w /tmp/project/test/clang/conan/build ubuntu cp bin/libstdc++.so.6.0.28 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21
+
 docker exec -w /tmp/project/test/clang/conan/build ubuntu bin/foobar
 docker exec -w /tmp/project/test/clang/conan/build ubuntu bin/foobar_c
 
