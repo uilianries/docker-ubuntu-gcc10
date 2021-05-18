@@ -4,10 +4,10 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG GCC_VERSION
 
-RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local --insert \
+RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
     && mkdir /tmp/install \
     && cd /tmp/install \
-    && conan install gcc/${GCC_VERSION}@uilianries/stable -g deploy
+    && conan install gcc/${GCC_VERSION}@uilianries/stable -r uilianr -g deploy
 
 USER root
 

@@ -10,10 +10,10 @@ ENV CONAN_REVISIONS_ENABLED=1 \
     CMAKE_C_COMPILER=x86_64-clang \
     CMAKE_CXX_COMPILER=x86_64-clang++
 
-RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local --insert \
+RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
     && mkdir /tmp/install \
     && cd /tmp/install \
-    && conan install clang/${LLVM_VERSION}@uilianries/stable -g deploy
+    && conan install clang/${LLVM_VERSION}@uilianries/stable -r uilianr -g deploy
 
 USER root
 
