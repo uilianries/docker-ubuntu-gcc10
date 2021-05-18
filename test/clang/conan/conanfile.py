@@ -1,8 +1,10 @@
 from conans import ConanFile, CMake
 
 class Pkg(ConanFile):
+    name = "foo"
+    version = "0.1"
     settings = "os", "compiler", "arch", "build_type"
-    requires = "zlib/1.2.11", "spdlog/1.8.5"
+    requires = "zlib/1.2.11", "spdlog/1.8.5", "libunwind/1.5.0"
     exports_sources = "CMakeLists.txt", "main.cpp", "main.c"
     generators = "cmake", "cmake_find_package_multi"
 

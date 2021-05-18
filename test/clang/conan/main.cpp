@@ -22,6 +22,7 @@ void syslog_example();
 
 #include "spdlog/spdlog.h"
 #include <zlib.h>
+#include <libunwind.h>
 
 int main(void)
 {
@@ -110,6 +111,12 @@ int main(void)
     printf("Compressed string is: %s\n", buffer_out);
 
     printf("ZLIB VERSION: %s\n", zlibVersion());
+
+    unw_context_t uc;
+    unw_cursor_t cursor;
+
+    unw_getcontext (&uc);
+    unw_init_local (&cursor, &uc);
 
     return 0;
 }

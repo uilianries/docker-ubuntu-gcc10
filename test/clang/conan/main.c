@@ -9,10 +9,13 @@
 #include <string.h>
 
 #include <zlib.h>
+#include <libunwind.h>
 
 int main(void) {
     char buffer_in [32] = {"Conan Package Manager"};
     char buffer_out [32] = {0};
+    unw_context_t uc;
+    unw_cursor_t cursor;
 
     z_stream defstream;
     defstream.zalloc = Z_NULL;
@@ -23,6 +26,8 @@ int main(void) {
     defstream.avail_out = (uInt) sizeof(buffer_out);
     defstream.next_out = (Bytef *) buffer_out;
 
+    unw_getcontext (&uc);
+    unw_init_local (&cursor, &uc);
     deflateInit(&defstream, Z_BEST_COMPRESSION);
     deflate(&defstream, Z_FINISH);
     deflateEnd(&defstream);

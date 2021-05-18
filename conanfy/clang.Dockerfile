@@ -14,6 +14,9 @@ RUN sudo apt-get -qq update \
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
 
+RUN sed -i 's/OUTPUT_NAME "unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
+    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
+
 RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && mkdir build \
     && cd build/ \
@@ -94,10 +97,9 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && ninja clang \
     && ninja lld \
     && ninja compiler-rt \
-    && ninja install-cxxabi install-cxx install-clang install-lld install-compiler-rt
+    && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt
 
-RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/libunwind.* /tmp/install/lib \
-    && cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
+RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
     && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib
 
 RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
