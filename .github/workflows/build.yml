@@ -63,9 +63,13 @@ jobs:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
+        chmod +x test/gcc/test_docker.sh
+        chmod +x test/gcc/test_conan.sh
+        chmod +x test/simple/test_docker.sh
+        chmod +x test/simple/test_simple.sh
+        test/simple/test_docker.sh ${{ matrix.version }}
         docker build -t uilianries/gcc-test --build-arg COMPILER=${{ matrix.version }} test/gcc
-        chmod +x test/gcc/run.sh
-        test/gcc/run.sh ${{ matrix.version }}
+        test/gcc/test_docker.sh ${{ matrix.version }}
   conanfy-clang:
     runs-on: ubuntu-latest
     if: False
@@ -84,6 +88,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build-clang:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -101,7 +106,7 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test-clang:
-    needs: build-clang
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -111,6 +116,10 @@ jobs:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
+        chmod +x test/clang/test_docker.sh
+        chmod +x test/clang/test_conan.sh
+        chmod +x test/simple/test_docker.sh
+        chmod +x test/simple/test_simple.sh
+        test/simple/test_docker.sh ${{ matrix.version }}
         docker build -t uilianries/clang-test --build-arg COMPILER=${{ matrix.version }} test/clang
-        chmod +x test/clang/run.sh
-        test/clang/run.sh ${{ matrix.version }}
+        test/clang/test_docker.sh ${{ matrix.version }}

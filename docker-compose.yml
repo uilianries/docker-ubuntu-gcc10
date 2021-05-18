@@ -6,6 +6,8 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 10.3.0
+                CMAKE_VERSION: 3.19.6
+                PYTHON_VERSION: 3.8.8
         image: "uilianries/base"
         container_name: base
         tty: true
@@ -16,7 +18,7 @@ services:
             args:
                 GCC_VERSION: 5.5.0
         image: "uilianries/gcc5-conanfy"
-        container_name: gcc5_conan
+        container_name: gcc5_conanfy
         tty: true
     gcc6-conanfy:
         build:
@@ -25,7 +27,7 @@ services:
             args:
                 GCC_VERSION: 6.5.0
         image: "uilianries/gcc6-conanfy"
-        container_name: gcc6_conan
+        container_name: gcc6_conanfy
         tty: true
     gcc7-conanfy:
         build:
@@ -34,7 +36,7 @@ services:
             args:
                 GCC_VERSION: 7.5.0
         image: "uilianries/gcc7-conanfy"
-        container_name: gcc7_conan
+        container_name: gcc7_conanfy
         tty: true
     gcc8-conanfy:
         build:
@@ -43,7 +45,7 @@ services:
             args:
                 GCC_VERSION: 8.4.0
         image: "uilianries/gcc8-conanfy"
-        container_name: gcc8_conan
+        container_name: gcc8_conanfy
         tty: true
     gcc9-conanfy:
         build:
@@ -52,7 +54,7 @@ services:
             args:
                 GCC_VERSION: 9.3.0
         image: "uilianries/gcc9-conanfy"
-        container_name: gcc9_conan
+        container_name: gcc9_conanfy
         tty: true
     gcc10-conanfy:
         build:
@@ -61,25 +63,7 @@ services:
             args:
                 GCC_VERSION: 10.3.0
         image: "uilianries/gcc10-conanfy"
-        container_name: gcc10_conan
-        tty: true
-    clang4-conanfy:
-        build:
-            context: conanfy
-            dockerfile: clang.Dockerfile
-            args:
-                LLVM_VERSION: 4.0.1
-        image: "uilianries/clang4-conanfy"
-        container_name: clang4_conan
-        tty: true
-    clang5-conanfy:
-        build:
-            context: conanfy
-            dockerfile: clang.Dockerfile
-            args:
-                LLVM_VERSION: 5.0.2
-        image: "uilianries/clang5-conanfy"
-        container_name: clang5_conan
+        container_name: gcc10_conanfy
         tty: true
     clang6-conanfy:
         build:
@@ -88,7 +72,7 @@ services:
             args:
                 LLVM_VERSION: 6.0.1
         image: "uilianries/clang6-conanfy"
-        container_name: clang6_conan
+        container_name: clang6_conanfy
         tty: true
     clang7-conanfy:
         build:
@@ -97,7 +81,7 @@ services:
             args:
                 LLVM_VERSION: 7.1.0
         image: "uilianries/clang7-conanfy"
-        container_name: clang7_conan
+        container_name: clang7_conanfy
         tty: true
     clang8-conanfy:
         build:
@@ -106,7 +90,7 @@ services:
             args:
                 LLVM_VERSION: 8.0.1
         image: "uilianries/clang8-conanfy"
-        container_name: clang8_conan
+        container_name: clang8_conanfy
         tty: true
     clang9-conanfy:
         build:
@@ -115,7 +99,7 @@ services:
             args:
                 LLVM_VERSION: 9.0.1
         image: "uilianries/clang9-conanfy"
-        container_name: clang9_conan
+        container_name: clang9_conanfy
         tty: true
     clang10-conanfy:
         build:
@@ -124,7 +108,7 @@ services:
             args:
                 LLVM_VERSION: 10.0.1
         image: "uilianries/clang10-conanfy"
-        container_name: clang10_conan
+        container_name: clang10_conanfy
         tty: true
     clang11-conanfy:
         build:
@@ -133,7 +117,7 @@ services:
             args:
                 LLVM_VERSION: 11.1.0
         image: "uilianries/clang11-conanfy"
-        container_name: clang11_conan
+        container_name: clang11_conanfy
         tty: true
     clang12-conanfy:
         build:
@@ -142,7 +126,7 @@ services:
             args:
                 LLVM_VERSION: 12.0.0
         image: "uilianries/clang12-conanfy"
-        container_name: clang12_conan
+        container_name: clang12_conanfy
         tty: true
     gcc5:
         build:
@@ -199,24 +183,6 @@ services:
                 GCC_VERSION: 10.3.0
         image: "uilianries/gcc10"
         container_name: gcc10
-        tty: true
-    clang4:
-        build:
-            context: clang
-            dockerfile: Dockerfile
-            args:
-                LLVM_VERSION: 4.0.1
-        image: "uilianries/clang4"
-        container_name: clang4
-        tty: true
-    clang5:
-        build:
-            context: clang
-            dockerfile: Dockerfile
-            args:
-                LLVM_VERSION: 5.0.2
-        image: "uilianries/clang5"
-        container_name: clang5
         tty: true
     clang6:
         build:

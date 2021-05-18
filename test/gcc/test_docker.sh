@@ -6,7 +6,7 @@ compiler=$1
 
 docker pull uilianries/${compiler}
 docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} uilianries/gcc-test
-docker exec ${compiler} /tmp/project/test/gcc/run_test.sh
+docker exec ${compiler} /tmp/project/test/gcc/test_conan.sh
 
 docker stop ${compiler}
 docker rm ${compiler}

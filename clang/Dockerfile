@@ -22,6 +22,7 @@ RUN mv /tmp/install/bin/* /usr/local/bin \
     && cp -a /tmp/install/include/* /usr/local/include \
     && update-alternatives --install /usr/bin/cc cc /usr/local/bin/clang 100 \
     && update-alternatives --install /usr/bin/cpp ccp /usr/local/bin/clang++ 100 \
+    && update-alternatives --install /usr/bin/c++ c++ /usr/local/bin/clang++ 100 \
     && update-alternatives --install /usr/bin/ld ld /usr/local/bin/ld.lld 100 \
     && rm -rf /tmp/install \
     && rm -rf /home/conan/.conan \

@@ -1,6 +1,6 @@
 FROM uilianries/base
 
-ARG CONAN_PASSWORD ARG CONAN_LOGIN_USERNAME ARG LLVM_VERSION
+ARG CONAN_PASSWORD CONAN_LOGIN_USERNAME LLVM_VERSION
 ENV CONAN_REVISIONS_ENABLED=1
 
 LABEL maintainer="Conan.io <info@conan.io>"
@@ -8,7 +8,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 COPY conanfile.py .
 
 RUN sudo apt-get -qq update \
-    && sudo apt-get -q install -y clang-4.0 lld-4.0 libc++abi-dev --no-install-recommends --no-install-suggests \
+    && sudo apt-get -q install -y g++-multilib gcc clang-4.0 lld-4.0 libc++abi-dev --no-install-recommends --no-install-suggests \
     && pip install ninja
 
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
@@ -77,7 +77,6 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=OFF \
        -DLIBCXX_USE_COMPILER_RT=ON \
        -DLIBCXX_DEBUG_BUILD=OFF \
-       -DLIBCXX_LIBCXXABI_INCLUDES_INTERNAL=ON \
        -DLIBCXXABI_ENABLE_ASSERTIONS=OFF \
        -DLIBCXXABI_ENABLE_PEDANTIC=OFF \
        -DLIBCXXABI_BUILD_32_BITS=OFF \
@@ -88,7 +87,6 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
        -DLIBCXX_CXX_ABI_INCLUDE_PATHS=/usr/include/libcxxabi \
        -DLIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL=ON \
-       -DLIBCXXABI_LIBUNWIND_SOURCES=../../libunwind/src \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
        -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \

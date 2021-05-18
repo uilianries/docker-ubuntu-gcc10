@@ -9,7 +9,7 @@ docker rm -f ubuntu
 
 docker pull uilianries/${compiler}
 docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} uilianries/clang-test
-docker exec ${compiler} /tmp/project/test/clang/run_test.sh
+docker exec ${compiler} /tmp/project/test/clang/test_docker.sh
 
 docker stop ${compiler}
 docker rm ${compiler}

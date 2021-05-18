@@ -5,7 +5,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 ENV PYENV_ROOT=/opt/pyenv \
     PATH=/opt/pyenv/shims:${PATH}
 
-ARG GCC_VERSION
+ARG GCC_VERSION CMAKE_VERSION PYTHON_VERSION
 
 WORKDIR /root
 
@@ -46,16 +46,16 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && make install-strip \
     && rm -rf /root/gcc-${GCC_VERSION}.tar.xz /root/gcc-${GCC_VERSION}
 
-RUN wget -q --no-check-certificate https://cmake.org/files/v3.19/cmake-3.19.6-Linux-x86_64.tar.gz \
-    && tar -xzf cmake-3.19.6-Linux-x86_64.tar.gz \
+RUN wget -q --no-check-certificate https://cmake.org/files/v$(printf ${CMAKE_VERSION} | cut -d. -f1-2)/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
+    && tar -xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
        --exclude=bin/cmake-gui \
        --exclude=doc/cmake \
-       --exclude=share/cmake-3.19/Help \
+       --exclude=share/cmake-(printf ${CMAKE_VERSION} | cut -d. -f1-2)/Help \
        --exclude=share/vim \
        --exclude=share/vim \
-    && cp -fR cmake-3.19.6-Linux-x86_64/* /usr \
-    && rm -rf /root/cmake-3.19.6-Linux-x86_64 \
-    && rm /root/cmake-3.19.6-Linux-x86_64.tar.gz
+    && cp -fR cmake-${CMAKE_VERSION}-Linux-x86_64/* /usr \
+    && rm -rf /root/cmake-${CMAKE_VERSION}-Linux-x86_64 \
+    && rm /root/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz
 
 RUN wget -q --no-check-certificate -O /usr/local/bin/jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-amd64/jfrog?bt_package=jfrog-cli-linux-amd64 \
     && chmod +x /usr/local/bin/jfrog
@@ -74,10 +74,9 @@ RUN wget --no-check-certificate --quiet -O /tmp/pyenv-installer https://github.c
     && /tmp/pyenv-installer \
     && rm /tmp/pyenv-installer \
     && update-alternatives --install /usr/bin/pyenv pyenv /opt/pyenv/bin/pyenv 100 \
-    && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.8 \
-    && pyenv global 3.8.8
+    && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install ${PYTHON_VERSION} \
+    && pyenv global ${PYTHON_VERSION}
 
-# remove all __pycache__ directories created by pyenv
 RUN chown -R conan:1001 /opt/pyenv \
     && find /opt/pyenv -iname __pycache__ -print0 | xargs -0 rm -rf \
     && update-alternatives --install /usr/bin/python3 python3 /opt/pyenv/shims/python3 100 \
@@ -102,6 +101,10 @@ RUN printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && mv /etc/ld.so.conf.d/zz_x32-biarch-compat.conf /etc/ld.so.conf.d/50zz_x32-biarch-compat.conf \
     && rm /etc/ld.so.cache \
     && ldconfig -C /etc/ld.so.cache
+
+RUN apt-get purge -y g++-multilib gcc \
+    && apt-get autoremove -y \
+    && apt-get autoclean
 
 USER conan
 WORKDIR /home/conan
