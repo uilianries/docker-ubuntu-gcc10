@@ -14,7 +14,7 @@ RUN sudo apt-get -qq update \
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
 
-RUN sed -i 's/OUTPUT_NAME "unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
+RUN sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
     && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
 
 RUN cd llvm-project-llvmorg-${LLVM_VERSION} \

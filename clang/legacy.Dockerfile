@@ -4,8 +4,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG LLVM_VERSION LLVM_MAJOR
 
-ENV CONAN_REVISIONS_ENABLED=1 \
-    CC=x86_64-clang \
+ENV CC=x86_64-clang \
     CXX=x86_64-clang++ \
     CMAKE_C_COMPILER=x86_64-clang \
     CMAKE_CXX_COMPILER=x86_64-clang++
@@ -31,6 +30,6 @@ RUN ln -rs /usr/local/bin/clang-${LLVM_MAJOR} /usr/local/bin/x86_64-clang \
 RUN rm -rf /tmp/install \
     && rm -rf /home/conan/.conan \
     && rm /etc/ld.so.cache \
-    && ldconfig -C /etc/ld.so.cache \
+    && ldconfig -C /etc/ld.so.cache
 
 USER conan

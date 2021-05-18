@@ -23,6 +23,8 @@ RUN mv /tmp/install/bin/* /usr/local/bin \
     && mv /tmp/install/libexec /usr/local/libexec \
     && mv /tmp/install/include/c++/${GCC_VERSION}/* /usr/local/include \
     && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+    && update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
+    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
     && rm -rf /tmp/install \
     && rm -rf /home/conan/.conan \
     && rm /etc/ld.so.cache \
