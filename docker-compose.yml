@@ -187,27 +187,30 @@ services:
     clang6:
         build:
             context: clang
-            dockerfile: Dockerfile
+            dockerfile: legacy.Dockerfile
             args:
                 LLVM_VERSION: 6.0.1
+                LLVM_MAJOR: 6.0
         image: "uilianries/clang6"
         container_name: clang6
         tty: true
     clang7:
         build:
             context: clang
-            dockerfile: Dockerfile
+            dockerfile: legacy.Dockerfile
             args:
                 LLVM_VERSION: 7.1.0
+                LLVM_MAJOR: 7
         image: "uilianries/clang7"
         container_name: clang7
         tty: true
     clang8:
         build:
             context: clang
-            dockerfile: Dockerfile
+            dockerfile: legacy.Dockerfile
             args:
                 LLVM_VERSION: 8.0.1
+                LLVM_MAJOR: 8
         image: "uilianries/clang8"
         container_name: clang8
         tty: true
