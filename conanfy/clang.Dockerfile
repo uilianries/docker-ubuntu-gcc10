@@ -15,7 +15,9 @@ RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
 
 RUN sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
+    && grep "llvm-unwind" llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
     && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
+    && grep "llvm-unwind" llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
 
 RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && mkdir build \
@@ -56,7 +58,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBUNWIND_ENABLE_ASSERTIONS=OFF \
        -DLIBUNWIND_ENABLE_PEDANTIC=OFF \
        -DLIBUNWIND_ENABLE_SHARED=ON \
-       -DLIBUNWIND_ENABLE_STATIC=ON \
+       -DLIBUNWIND_ENABLE_STATIC=OFF \
        -DLIBUNWIND_USE_COMPILER_RT=ON \
        -DCLANG_INCLUDE_TESTS=OFF \
        -DCLANG_ENABLE_ARCMT=OFF \

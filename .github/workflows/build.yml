@@ -72,11 +72,10 @@ jobs:
         test/gcc/test_docker.sh ${{ matrix.version }}
   conanfy-clang:
     runs-on: ubuntu-latest
-    if: False
     strategy:
       fail-fast: false
       matrix:
-        version: [clang6-conanfy, clang7-conanfy, clang8-conanfy, clang9-conanfy, clang10-conanfy, clang11-conanfy, clang12-conanfy]
+        version: [clang8-conanfy, clang9-conanfy, clang10-conanfy, clang11-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -88,12 +87,12 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   build-clang:
-    if: False
+    needs: conanfy-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang6, clang7, clang8, clang9, clang10, clang11]
+        version: [clang8, clang9, clang10, clang11]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -106,12 +105,12 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test-clang:
-    if: False
+    needs: build-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang6, clang7, clang8, clang9, clang10, clang11]
+        version: [clang8, clang9, clang10, clang11]
     steps:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
