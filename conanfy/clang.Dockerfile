@@ -16,7 +16,7 @@ RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/
 
 RUN sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
     && grep "llvm-unwind" llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
-    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
+    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp \
     && grep "llvm-unwind" llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
 
 RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
