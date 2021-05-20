@@ -46,16 +46,16 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && make install-strip \
     && rm -rf /root/gcc-${GCC_VERSION}.tar.xz /root/gcc-${GCC_VERSION}
 
-RUN wget -q --no-check-certificate https://cmake.org/files/v$(printf ${CMAKE_VERSION} | cut -d. -f1-2)/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
-    && tar -xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
+RUN wget -q --no-check-certificate https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.tar.gz \
+    && tar -xzf cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.tar.gz \
        --exclude=bin/cmake-gui \
        --exclude=doc/cmake \
-       --exclude=share/cmake-(printf ${CMAKE_VERSION} | cut -d. -f1-2)/Help \
+       --exclude=share/cmake-${CMAKE_VERSION}/Help \
        --exclude=share/vim \
        --exclude=share/vim \
-    && cp -fR cmake-${CMAKE_VERSION}-Linux-x86_64/* /usr \
-    && rm -rf /root/cmake-${CMAKE_VERSION}-Linux-x86_64 \
-    && rm /root/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz
+    && cp -fR cmake-${CMAKE_VERSION_FULL}-Linux-x86_64/* /usr \
+    && rm -rf /root/cmake-${CMAKE_VERSION_FULL}-Linux-x86_64 \
+    && rm /root/cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.tar.gz
 
 RUN wget -q --no-check-certificate -O /usr/local/bin/jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/\$latest/jfrog-cli-linux-amd64/jfrog?bt_package=jfrog-cli-linux-amd64 \
     && chmod +x /usr/local/bin/jfrog

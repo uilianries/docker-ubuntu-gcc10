@@ -6,7 +6,8 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 10.3.0
-                CMAKE_VERSION: 3.19.6
+                CMAKE_VERSION_FULL: 3.19.6
+                CMAKE_VERSION: 3.19
                 PYTHON_VERSION: 3.8.8
         image: "${DOCKER_REPOSITORY}/base"
         container_name: base
