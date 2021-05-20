@@ -2,40 +2,23 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
-    if: False
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     steps:
     - uses: actions/checkout@master
     - name: Build Docker Base Image
       run: |
-        docker-compose pull base
         docker-compose build base
-    - name: Inspect Docker image uilianries/base
-      run: docker inspect uilianries/base
     - name: Docker login
-      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-    - name: Docker Upload image uilianries/base
-      run: docker push uilianries/base
-  conanfy-gcc:
-    if: False
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version: [gcc5-conanfy, gcc6-conanfy, gcc7-conanfy, gcc8-conanfy, gcc9-conanfy, gcc10-conanfy]
-    steps:
-    - uses: actions/checkout@master
-    - name: Build ${{ matrix.version }}
-      run: |
-        docker-compose pull ${{ matrix.version }}
-        docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
-    - name: Docker login
-      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-    - name: Docker Upload image uilianries/${{ matrix.version }}
-      run: docker push uilianries/${{ matrix.version }}
+      run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+    - name: Docker Upload image base
+      run: docker push ${{ secrets.DOCKER_REPOSITORY }}/base
   build-gcc:
-    if: False
+    needs: base
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
@@ -43,24 +26,41 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
-      run: |
-        docker-compose pull ${{ matrix.version }}
-        docker-compose build ${{ matrix.version }}
-    - name: Inspect Docker image uilianries/${{ matrix.version }}
-      run: docker inspect uilianries/${{ matrix.version }}
+      run: docker-compose build ${{ matrix.version }}
     - name: Docker login
-      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-    - name: Docker Upload image uilianries/${{ matrix.version }}
-      run: docker push uilianries/${{ matrix.version }}
-  test-gcc:
-    if: False
+      run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+    - name: Docker Upload image ${{ matrix.version }}
+      run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
+  build-clang:
+    needs: base
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [clang9, clang10, clang11, clang12]
+    steps:
+    - uses: actions/checkout@master
+    - name: Build ${{ matrix.version }}
+      run: docker-compose build ${{ matrix.version }}
+    - name: Docker login
+      run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+    - name: Docker Upload image ${{ matrix.version }}
+      run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
+  test-gcc:
+    needs: build-gcc
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
         version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
     steps:
     - uses: actions/checkout@master
+    - name: Docker login
+      run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Test ${{ matrix.version }}
       run: |
         chmod +x test/gcc/conan/run.sh
@@ -74,50 +74,19 @@ jobs:
         test/package/run.sh ${{ matrix.version }}
         test/gcc/fortran/run.sh ${{ matrix.version }}
         test/gcc/conan/run.sh ${{ matrix.version }}
-  conanfy-clang:
-    if: False
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version: [clang9-conanfy, clang10-conanfy, clang11-conanfy]
-    steps:
-    - uses: actions/checkout@master
-    - name: Build ${{ matrix.version }}
-      run: |
-        docker-compose pull ${{ matrix.version }}
-        docker-compose build --build-arg CONAN_PASSWORD=${{ secrets.CONAN_PASSWORD }} --build-arg CONAN_LOGIN_USERNAME=${{ secrets.CONAN_LOGIN_USERNAME }} ${{ matrix.version }}
-    - name: Docker login
-      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-    - name: Docker Upload image uilianries/${{ matrix.version }}
-      run: docker push uilianries/${{ matrix.version }}
-  build-clang:
-    if: False
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version: [clang9, clang10, clang11]
-    steps:
-    - uses: actions/checkout@master
-    - name: Build ${{ matrix.version }}
-      run: |
-        docker-compose build ${{ matrix.version }}
-    - name: Inspect Docker image uilianries/${{ matrix.version }}
-      run: docker inspect uilianries/${{ matrix.version }}
-    - name: Docker login
-      run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-    - name: Docker Upload image uilianries/${{ matrix.version }}
-      run: docker push uilianries/${{ matrix.version }}
   test-clang:
-    if: False
+    needs: build-clang
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
-        version: [clang9, clang10, clang11]
+        version: [clang9, clang10, clang11, clang12]
     steps:
     - uses: actions/checkout@master
+    - name: Docker login
+      run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Test ${{ matrix.version }}
       run: |
         chmod +x test/clang/conan/run.sh

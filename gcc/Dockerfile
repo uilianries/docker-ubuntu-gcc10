@@ -1,34 +1,42 @@
-FROM uilianries/base
+ARG DOCKER_REPOSITORY
 
-LABEL maintainer="Conan.io <info@conan.io>"
+FROM ${DOCKER_REPOSITORY}/base as buider
 
 ARG GCC_VERSION
 
-RUN conan remote add uilianr https://uilianr.jfrog.io/artifactory/api/conan/local \
-    && mkdir /tmp/install \
-    && cd /tmp/install \
-    && conan install gcc/${GCC_VERSION}@uilianries/stable -r uilianr -g deploy
+LABEL maintainer="Conan.io <info@conan.io>"
 
-USER root
+RUN sudo apt-get -qq update \
+    && sudo apt-get -q install -y g++-multilib gcc --no-install-recommends --no-install-suggests
 
-RUN apt-get purge -y g++-multilib \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
-    && apt-get update \
-    && rm -rf /var/lib/apt/lists/*
+RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
+    && tar Jxf gcc-${GCC_VERSION}.tar.xz \
+    && cd gcc-${GCC_VERSION} \
+    && ./configure --build=x86_64-linux-gnu \
+                   --disable-bootstrap \
+                   --disable-multilib \
+                   --disable-nsl \
+                   --enable-languages=c,c++,fortran \
+                   --disable-werror \
+                   --without-isl \
+                   --enable-gold \
+                   --with-system-zlib \
+                   --prefix=/tmp/install \
+    && make -j$(nproc) \
+    && make install-strip
 
-RUN mv /tmp/install/bin/* /usr/local/bin \
-    && rm -rf /usr/local/lib/gcc \
-    && mv /tmp/install/lib/* /usr/local/lib \
-    && mv /tmp/install/libexec /usr/local/libexec \
-    && mv /tmp/install/include/c++/${GCC_VERSION}/* /usr/local/include \
-    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
-    && update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
-    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
-    && rm -rf /tmp/install \
-    && rm -rf /home/conan/.conan \
-    && rm /etc/ld.so.cache \
-    && ldconfig -C /etc/ld.so.cache
+FROM ${DOCKER_REPOSITORY}/base as final
 
+COPY --from=0 /tmp/install /tmp/install
 
-USER conan
+RUN sudo mv /tmp/install/bin/* /usr/local/bin \
+    && sudo rm -rf /usr/local/lib/gcc \
+    && sudo mv /tmp/install/lib/* /usr/local/lib \
+    && sudo mv /tmp/install/libexec /usr/local/libexec \
+    && sudo mv /tmp/install/include/c++/${GCC_VERSION}/* /usr/local/include \
+    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+    && sudo update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
+    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
+    && sudo rm -rf /tmp/install \
+    && sudo rm /etc/ld.so.cache \
+    && sudo ldconfig -C /etc/ld.so.cache

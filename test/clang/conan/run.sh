@@ -7,8 +7,8 @@ compiler=$1
 docker rm -f ${compiler}
 docker rm -f ubuntu
 
-docker pull uilianries/${compiler}
-docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} uilianries/${compiler}
+docker pull ${DOCKER_REPOSITORY}/${compiler}
+docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
 docker exec ${compiler} /tmp/project/test/clang/conan/test_conan.sh
 
 docker stop ${compiler}

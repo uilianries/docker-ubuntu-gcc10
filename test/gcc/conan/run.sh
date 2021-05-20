@@ -4,8 +4,8 @@ set -ex
 
 compiler=$1
 
-docker pull uilianries/${compiler}
-docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} uilianries/${compiler}
+docker pull ${DOCKER_REPOSITORY}/${compiler}
+docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
 docker exec ${compiler} /tmp/project/test/gcc/test_conan.sh
 
 docker stop ${compiler}

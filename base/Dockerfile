@@ -102,9 +102,11 @@ RUN printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && rm /etc/ld.so.cache \
     && ldconfig -C /etc/ld.so.cache
 
-RUN apt-get purge -y g++-multilib gcc \
+RUN apt-get purge -y g++-multilib gcc gcc-5 \
     && apt-get autoremove -y \
-    && apt-get autoclean
+    && apt-get autoclean \
+    && apt-get -qq update \
+    && rm -rf /var/lib/apt/lists/*
 
 USER conan
 WORKDIR /home/conan
