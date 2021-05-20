@@ -187,7 +187,7 @@ services:
     clang6:
         build:
             context: clang
-            dockerfile: Dockerfile
+            dockerfile: clang6.Dockerfile
             args:
                 LLVM_VERSION: 6.0.1
                 LLVM_MAJOR: 6.0

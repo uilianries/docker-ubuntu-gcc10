@@ -20,10 +20,10 @@ RUN apt-get purge -y g++-multilib gcc \
 RUN mv /tmp/install/bin/* /usr/local/bin \
     && mv /tmp/install/lib/* /usr/local/lib \
     && cp -a /tmp/install/include/* /usr/local/include \
-    && update-alternatives --install /usr/bin/cc cc /usr/local/bin/clang 100 \
-    && update-alternatives --install /usr/bin/cpp ccp /usr/local/bin/clang++ 100 \
-    && update-alternatives --install /usr/bin/c++ c++ /usr/local/bin/clang++ 100 \
-    && update-alternatives --install /usr/bin/ld ld /usr/local/bin/ld.lld 100 \
+    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
+    && update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
+    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
+    && update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
     && rm -rf /tmp/install \
     && rm -rf /home/conan/.conan \
     && rm /etc/ld.so.cache \

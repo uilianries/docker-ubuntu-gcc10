@@ -2,17 +2,13 @@
 
 set -ex
 
-mkdir -p /tmp/project/test/simple/build
-rm -rf /tmp/project/test/simple/build*
+mkdir -p /tmp/build
+rm -rf /tmp/build/*
 
-pushd /tmp/project/test/simple/build
+pushd /tmp/build
 
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build
+cmake ../project/test/simple -DCMAKE_BUILD_TYPE=Release
+cmake --build .
 
 ./example-c
 ./example-cpp
-
-if [ -f example-cpp-clang ]
-    ./example-cpp-clang
-fi

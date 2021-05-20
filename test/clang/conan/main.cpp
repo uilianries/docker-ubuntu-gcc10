@@ -22,7 +22,10 @@ void syslog_example();
 
 #include "spdlog/spdlog.h"
 #include <zlib.h>
-#include <libunwind.h>
+
+#ifdef WITH_UNWIND
+#    include <libunwind.h>
+#endif
 
 int main(void)
 {
@@ -112,11 +115,13 @@ int main(void)
 
     printf("ZLIB VERSION: %s\n", zlibVersion());
 
+#ifdef WITH_UNWIND
     unw_context_t uc;
     unw_cursor_t cursor;
 
     unw_getcontext (&uc);
     unw_init_local (&cursor, &uc);
+#endif
 
     return 0;
 }

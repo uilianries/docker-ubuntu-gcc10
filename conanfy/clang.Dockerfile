@@ -18,7 +18,8 @@ RUN sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-projec
     && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp \
     && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CloudABI.cpp \
     && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/MipsLinux.cpp \
-    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/BareMetal.cpp
+    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/BareMetal.cpp \
+    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/Fuchsia.cpp
 
 
 RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
@@ -60,7 +61,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBUNWIND_ENABLE_ASSERTIONS=OFF \
        -DLIBUNWIND_ENABLE_PEDANTIC=OFF \
        -DLIBUNWIND_ENABLE_SHARED=ON \
-       -DLIBUNWIND_ENABLE_STATIC=OFF \
+       -DLIBUNWIND_ENABLE_STATIC=ON \
        -DLIBUNWIND_USE_COMPILER_RT=ON \
        -DCLANG_INCLUDE_TESTS=OFF \
        -DCLANG_ENABLE_ARCMT=OFF \
@@ -88,7 +89,8 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXXABI_ENABLE_SHARED=ON \
        -DLIBCXXABI_ENABLE_STATIC=OFF \
        -DLIBCXXABI_USE_COMPILER_RT=ON \
-       -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
+       -DLIBCXXABI_USE_LLVM_UNWINDER=ON \
+       -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
        -DLIBCXX_CXX_ABI_INCLUDE_PATHS=/usr/include/libcxxabi \
        -DLIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL=ON \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$1" != "-cc1" ]; then
+    /usr/local/bin/x86_64-clang --config /usr/local/bin/x86_64.cfg $@
+else
+    # Target is already an argument.
+    /usr/local/bin/x86_64-clang $@
+fi

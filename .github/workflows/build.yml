@@ -63,20 +63,24 @@ jobs:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
-        chmod +x test/gcc/test_docker.sh
-        chmod +x test/gcc/test_conan.sh
-        chmod +x test/simple/test_docker.sh
+        chmod +x test/gcc/conan/run.sh
+        chmod +x test/gcc/conan/test_conan.sh
+        chmod +x test/gcc/fortran/run.sh
+        chmod +x test/gcc/fortran/test_fortran.sh
+        chmod +x test/simple/run.sh
         chmod +x test/simple/test_simple.sh
-        test/simple/test_docker.sh ${{ matrix.version }}
-        docker build -t uilianries/gcc-test --build-arg COMPILER=${{ matrix.version }} test/gcc
-        test/gcc/test_docker.sh ${{ matrix.version }}
+        chmod +x test/package/run.sh
+        test/simple/run.sh ${{ matrix.version }}
+        test/package/run.sh ${{ matrix.version }}
+        test/gcc/fortran/run.sh ${{ matrix.version }}
+        test/gcc/conan/run.sh ${{ matrix.version }}
   conanfy-clang:
     if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang8-conanfy, clang9-conanfy, clang10-conanfy, clang11-conanfy]
+        version: [clang9-conanfy, clang10-conanfy, clang11-conanfy]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -93,7 +97,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [clang8, clang9, clang10, clang11]
+        version: [clang9, clang10, clang11]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -106,19 +110,21 @@ jobs:
     - name: Docker Upload image uilianries/${{ matrix.version }}
       run: docker push uilianries/${{ matrix.version }}
   test-clang:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [clang8, clang9, clang10, clang11]
+        version: [clang9, clang10, clang11]
     steps:
     - uses: actions/checkout@master
     - name: Test ${{ matrix.version }}
       run: |
-        chmod +x test/clang/test_docker.sh
-        chmod +x test/clang/test_conan.sh
-        chmod +x test/simple/test_docker.sh
+        chmod +x test/clang/conan/run.sh
+        chmod +x test/clang/conan/test_conan.sh
+        chmod +x test/simple/run.sh
         chmod +x test/simple/test_simple.sh
-        test/simple/test_docker.sh ${{ matrix.version }}
-        docker build -t uilianries/clang-test --build-arg COMPILER=${{ matrix.version }} test/clang
-        test/clang/test_docker.sh ${{ matrix.version }}
+        chmod +x test/package/run.sh
+        test/simple/run.sh ${{ matrix.version }}
+        test/package/run.sh ${{ matrix.version }}
+        test/clang/run.sh ${{ matrix.version }}
