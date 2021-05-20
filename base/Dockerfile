@@ -5,7 +5,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 ENV PYENV_ROOT=/opt/pyenv \
     PATH=/opt/pyenv/shims:${PATH}
 
-ARG GCC_VERSION CMAKE_VERSION PYTHON_VERSION
+ARG GCC_VERSION CMAKE_VERSION CMAKE_VERSION_FULL PYTHON_VERSION
 
 WORKDIR /root
 
@@ -42,7 +42,7 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
     && tar Jxf gcc-${GCC_VERSION}.tar.xz \
     && cd gcc-${GCC_VERSION} \
     && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/base \
-    && make -j2 \
+    && make -j$(nproc) \
     && make install-strip \
     && rm -rf /root/gcc-${GCC_VERSION}.tar.xz /root/gcc-${GCC_VERSION}
 
