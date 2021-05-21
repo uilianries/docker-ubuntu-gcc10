@@ -5,6 +5,8 @@ set -ex
 POCO_FOLDER=/home/conan/conan-center-index/recipes/poco/all
 POCO_VERSION=1.9.4
 
+export CONAN_PRINT_RUN_COMMANDS=1
+
 conan create ${POCO_FOLDER} poco/${POCO_VERSION}@ --build -s compiler.libcxx=libstdc++ -s build_type=Release -o poco:shared=False
 conan create ${POCO_FOLDER} poco/${POCO_VERSION}@ --build -s compiler.libcxx=libstdc++ -s build_type=Debug   -o poco:shared=False
 conan create ${POCO_FOLDER} poco/${POCO_VERSION}@ --build -s compiler.libcxx=libstdc++ -s build_type=Release -o poco:shared=True
