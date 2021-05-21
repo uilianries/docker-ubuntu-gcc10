@@ -3,13 +3,12 @@ on: [push]
 jobs:
   base:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     steps:
     - uses: actions/checkout@master
     - name: Build Docker Base Image
-      run: |
-        docker-compose build base
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+      run: docker-compose build base
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image base
@@ -17,8 +16,6 @@ jobs:
   build-gcc:
     needs: base
     runs-on: ubuntu-latest
-    env:
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
@@ -26,6 +23,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: docker-compose build ${{ matrix.version }}
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
@@ -34,8 +33,6 @@ jobs:
   build-clang:
     needs: base
     runs-on: ubuntu-latest
-    env:
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
@@ -43,6 +40,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: docker-compose build ${{ matrix.version }}
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
@@ -51,8 +50,6 @@ jobs:
   test-gcc:
     needs: build-gcc
     runs-on: ubuntu-latest
-    env:
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
@@ -62,6 +59,8 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Test ${{ matrix.version }}
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: |
         chmod +x test/gcc/conan/run.sh
         chmod +x test/gcc/conan/test_conan.sh
@@ -77,8 +76,6 @@ jobs:
   test-clang:
     needs: build-clang
     runs-on: ubuntu-latest
-    env:
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
     strategy:
       fail-fast: false
       matrix:
@@ -88,6 +85,8 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Test ${{ matrix.version }}
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: |
         chmod +x test/clang/conan/run.sh
         chmod +x test/clang/conan/test_conan.sh
