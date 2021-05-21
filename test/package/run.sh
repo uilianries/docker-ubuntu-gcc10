@@ -4,9 +4,10 @@ set -ex
 
 compiler=$1
 
-docker run -t -d --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
+docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
 docker exec ${compiler} git clone https://github.com/conan-io/conan-center-index.git
-docker exec ${compiler} conan create conan-center-index/recipes/boost/all boost/1.76.0@user/testing --build
+docker exec ${compiler} -w python /tmp/project/test/package/build_boost.sh
+docker exec ${compiler} -w python /tmp/project/test/package/build_poco.sh
 
 docker stop ${compiler}
 docker rm -f ${compiler}

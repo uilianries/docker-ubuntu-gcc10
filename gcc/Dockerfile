@@ -27,13 +27,15 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
 
 FROM ${DOCKER_REPOSITORY}/base as final
 
+ARG GCC_VERSION
+
 COPY --from=0 /tmp/install /tmp/install
 
 RUN sudo mv /tmp/install/bin/* /usr/local/bin \
     && sudo rm -rf /usr/local/lib/gcc \
     && sudo mv /tmp/install/lib/* /usr/local/lib \
     && sudo mv /tmp/install/libexec /usr/local/libexec \
-    && sudo mv /tmp/install/include/c++/${GCC_VERSION}/* /usr/local/include \
+    && sudo mv /tmp/install/include/c++/${GCC_VERSION}/* /usr/local/include/ \
     && sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
     && sudo update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
     && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \

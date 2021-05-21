@@ -68,6 +68,8 @@ jobs:
         chmod +x test/simple/run.sh
         chmod +x test/simple/test_simple.sh
         chmod +x test/package/run.sh
+        chmod +x test/package/build_poco.sh
+        chmod +x test/package/build_boost.sh
         test/simple/run.sh ${{ matrix.version }}
         test/package/run.sh ${{ matrix.version }}
         test/gcc/fortran/run.sh ${{ matrix.version }}
@@ -92,6 +94,8 @@ jobs:
         chmod +x test/simple/run.sh
         chmod +x test/simple/test_simple.sh
         chmod +x test/package/run.sh
+        chmod +x test/package/build_poco.sh
+        chmod +x test/package/build_boost.sh
         test/simple/run.sh ${{ matrix.version }}
         test/package/run.sh ${{ matrix.version }}
         test/clang/run.sh ${{ matrix.version }}

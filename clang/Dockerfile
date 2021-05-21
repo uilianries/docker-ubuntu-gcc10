@@ -12,7 +12,7 @@ RUN sudo apt-get -qq update \
     && wget -q --no-check-certificate https://apt.llvm.org/llvm-snapshot.gpg.key \
     && sudo apt-key add llvm-snapshot.gpg.key \
     && sudo apt-get -qq update \
-    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests clang-10 lld-10 libc++-10-dev libc++abi-10-dev \
+    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests clang-10 lld-10 libc++-10-dev \
     && pip install ninja
 
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
@@ -78,29 +78,35 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
        -DLIBCXX_GENERATE_COVERAGE=OFF \
        -DLIBCXX_BUILD_32_BITS=OFF \
        -DLIBCXX_CXX_ABI=libcxxabi \
-       -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=OFF \
+       -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
        -DLIBCXX_USE_COMPILER_RT=ON \
        -DLIBCXX_DEBUG_BUILD=OFF \
+       -DLIBCXX_CXX_ABI=libcxxabi \
+       -DLIBCXX_CXX_ABI_INCLUDE_PATHS=../libcxxabi/include/ \
        -DLIBCXXABI_ENABLE_ASSERTIONS=OFF \
        -DLIBCXXABI_ENABLE_PEDANTIC=OFF \
        -DLIBCXXABI_BUILD_32_BITS=OFF \
        -DLIBCXXABI_INCLUDE_TESTS=OFF \
        -DLIBCXXABI_ENABLE_SHARED=ON \
-       -DLIBCXXABI_ENABLE_STATIC=OFF \
+       -DLIBCXXABI_ENABLE_STATIC=ON \
        -DLIBCXXABI_USE_COMPILER_RT=ON \
        -DLIBCXXABI_USE_LLVM_UNWINDER=ON \
        -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON \
-       -DLIBCXX_CXX_ABI_INCLUDE_PATHS=../libcxxabi/include/ \
+       -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_SHARED_LIBRARY=ON \
        -DLIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL=ON \
        -DCOMPILER_RT_INCLUDE_TESTS=OFF \
        -DCOMPILER_RT_USE_LIBCXX=ON \
     && ninja unwind \
     && ninja cxxabi \
+    && sudo cp lib/libc++abi* /usr/lib/ \
     && ninja cxx \
     && ninja clang \
     && ninja lld \
     && ninja compiler-rt \
     && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt
+
+# FIXME: Clang 9 and 10 fail to build libcxx because they try to link from system.
+#        We could add a patch with target_link_directories, but I prefered copying libc++abi to /usr/lib
 
 RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
     && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib
