@@ -2,7 +2,7 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as buider
 
-ARG LVM_VERSION
+ARG LLVM_VERSION
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
