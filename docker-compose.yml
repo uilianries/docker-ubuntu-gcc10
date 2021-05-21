@@ -74,6 +74,16 @@ services:
         image: "${DOCKER_REPOSITORY}/gcc10"
         container_name: gcc10
         tty: true
+    gcc11:
+        build:
+            context: gcc
+            dockerfile: Dockerfile
+            args:
+                GCC_VERSION: 11.1.0
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: "${DOCKER_REPOSITORY}/gcc11"
+        container_name: gcc10
+        tty: true
     clang9:
         build:
             context: clang

@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
+        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10, gcc11]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -53,7 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
+        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10, gcc11]
     steps:
     - uses: actions/checkout@master
     - name: Docker login

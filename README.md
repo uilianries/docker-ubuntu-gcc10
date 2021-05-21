@@ -113,6 +113,26 @@ Validate the standard library support, we build 2 different packages:
 - imagl/0.2.1: Requires C++20
 - libsolace/0.3.9: Requires C++17 and is not header-only
 
+### How to Build
+
+First, you will installed:
+
+- Docker
+- Docker Compose (pip install docker-compose)
+
+Second, you have to set the DOCKER_REPOSITORY name:
+
+    export DOCKER_REPOSITORY=${USER}
+
+Or, if you are on Windows:
+
+    set DOCKER_REPOSITORY=%USERNAME%
+
+So finally you can build any image:
+
+    docker-compose build gcc10
+    docker-compose build clang11
+
 ### LICENSE
 
 [MIT](LICENSE)
