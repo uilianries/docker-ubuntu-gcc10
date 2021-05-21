@@ -103,10 +103,10 @@ We build a hello world app with Fortran and CMake
 
 #### Large Conan packages
 
-Boost and Poco are large packages which require more headers than usual.
+Poco is a large package which requires more headers than usual.
 This test is too validate if we forgot some header or library
 
-#### C++ Standard support (TODO)
+#### C++ Standard support
 
 Validate the standard library support, we build 2 different packages:
 

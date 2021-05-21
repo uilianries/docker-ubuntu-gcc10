@@ -1,6 +1,6 @@
 ARG DOCKER_REPOSITORY
 
-FROM ${DOCKER_REPOSITORY}/base as buider
+FROM ${DOCKER_REPOSITORY}/base as builder
 
 ARG GCC_VERSION
 
@@ -29,7 +29,7 @@ FROM ${DOCKER_REPOSITORY}/base as final
 
 ARG GCC_VERSION
 
-COPY --from=0 /tmp/install /tmp/install
+COPY --from=builder /tmp/install /tmp/install
 
 RUN sudo mv /tmp/install/bin/* /usr/local/bin \
     && sudo rm -rf /usr/local/lib/gcc \

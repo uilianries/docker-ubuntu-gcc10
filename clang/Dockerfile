@@ -1,6 +1,6 @@
 ARG DOCKER_REPOSITORY
 
-FROM ${DOCKER_REPOSITORY}/base as buider
+FROM ${DOCKER_REPOSITORY}/base as builder
 
 ARG LLVM_VERSION
 
@@ -113,7 +113,7 @@ RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/i
 
 FROM ${DOCKER_REPOSITORY}/base as final
 
-COPY --from=0 /tmp/install /tmp/install
+COPY --from=builder /tmp/install /tmp/install
 
 RUN sudo mv /tmp/install/bin/* /usr/local/bin \
     && sudo mv /tmp/install/lib/* /usr/local/lib \
