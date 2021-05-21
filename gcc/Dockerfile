@@ -22,7 +22,7 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
                    --enable-gold \
                    --with-system-zlib \
                    --prefix=/tmp/install \
-    && make -j$(nproc) \
+    && make -s -j$(nproc) \
     && make install-strip
 
 FROM ${DOCKER_REPOSITORY}/base as final

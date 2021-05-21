@@ -6,7 +6,7 @@ compiler=$1
 
 docker pull ${DOCKER_REPOSITORY}/${compiler}
 docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
-docker exec ${compiler} /tmp/project/test/gcc/test_conan.sh
+docker exec ${compiler} /tmp/project/test/gcc/conan/test_conan.sh
 
 docker stop ${compiler}
 docker rm ${compiler}

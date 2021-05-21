@@ -15,12 +15,11 @@ jobs:
     - name: Docker Upload image base
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/base
   build-gcc:
-    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10, gcc11]
+        version: [gcc11]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
