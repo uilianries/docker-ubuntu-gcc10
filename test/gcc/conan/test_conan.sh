@@ -9,7 +9,6 @@ conan --version
 cpp --version
 cc --version
 
-export CONAN_USER_HOME=/tmp/project/conan
 export CONAN_PRINT_RUN_COMMANDS=1
 
 mkdir -p /tmp/build

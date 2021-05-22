@@ -53,7 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10, gcc11]
+        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
     steps:
     - uses: actions/checkout@master
     - name: Docker login
@@ -104,4 +104,4 @@ jobs:
         test/simple/run.sh ${{ matrix.version }}
         test/standard/run.sh ${{ matrix.version }}
         test/package/run.sh ${{ matrix.version }}
-        test/clang/run.sh ${{ matrix.version }}
+        test/clang/conan/run.sh ${{ matrix.version }}
