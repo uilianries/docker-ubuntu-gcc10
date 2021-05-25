@@ -10,8 +10,9 @@ RUN sudo apt-get -qq update \
     && sudo apt-get -q install -y g++-multilib gcc --no-install-recommends --no-install-suggests
 
 RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
-    && tar Jxf gcc-${GCC_VERSION}.tar.xz \
-    && cd gcc-${GCC_VERSION} \
+    && tar Jxf gcc-${GCC_VERSION}.tar.xz
+
+RUN cd gcc-${GCC_VERSION} \
     && ./configure --build=x86_64-linux-gnu \
                    --disable-bootstrap \
                    --disable-multilib \
@@ -19,7 +20,6 @@ RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/g
                    --enable-languages=c,c++,fortran \
                    --disable-werror \
                    --without-isl \
-                   --enable-gold \
                    --with-system-zlib \
                    --prefix=/tmp/install \
     && make -s -j$(nproc) \
