@@ -28,5 +28,7 @@ elif egrep 'compiler\.version=(9|10|11|12)' /home/conan/.conan/profiles/default;
     conan create ${IMAGL_FOLDER} ${IMAGL_VERSION}@ --build -s compiler.libcxx=libstdc++ -s build_type=Release
     conan create ${IMAGL_FOLDER} ${IMAGL_VERSION}@ --build -s compiler.libcxx=libstdc++11 -s build_type=Release -o imagl:shared=True
     conan install imagl/${IMAGL_VERSION}@ -g deploy -s compiler.libcxx=libstdc++11 -s build_type=Release -o imagl:shared=True
-    ldd imagl/lib/libimaGL.so | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6.0.28'
+    ldd imagl/lib/libimaGL.so | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6'
+    ldd imagl/lib/libimaGL.so | grep 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so'
+
 fi

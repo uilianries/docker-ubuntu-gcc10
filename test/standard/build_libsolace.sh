@@ -23,7 +23,8 @@ if grep gcc /home/conan/.conan/profiles/default ; then
 
         conan create ${LIBSOLACE_FOLDER} ${LIBSOLACE_VERSION}@ --build -s compiler.libcxx=libstdc++ -s build_type=Release -o libsolace:shared=True
         conan install libsolace/${LIBSOLACE_VERSION}@ -g deploy -s compiler.libcxx=libstdc++ -s build_type=Release -o libsolace:shared=True
-        ldd libsolace/lib/libsolace.so | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6.0.28'
+        ldd libsolace/lib/libsolace.so | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6'
+        ldd libsolace/lib/libsolace.so | grep 'libc.so.6 => /lib/x86_64-linux-gnu/libc.so'
     fi
 elif grep clang /home/conan/.conan/profiles/default ; then
     conan create ${LIBSOLACE_FOLDER} ${LIBSOLACE_VERSION}@ --build -s compiler.libcxx=libstdc++ -s build_type=Release
