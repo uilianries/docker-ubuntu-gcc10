@@ -22,21 +22,20 @@ conan create ../project/test/clang/conan foo/0.1@user/testing --build -s compile
 conan install foo/0.1@user/testing -g deploy -s compiler.libcxx=libc++
 
 ldd bin/foobar | grep 'libc++.so.1 => /usr/local/lib/libc++.so.1'
-ldd bin/foobar | grep 'libunwind.so.1 => /usr/local/lib/libunwind.so.1'
-ldd bin/foobar | grep 'libc++abi.so.1 => /usr/local/lib/libc++abi.so.1'
+ldd bin/foobar | grep 'libllvm-unwind.so.1 => /usr/local/lib/libllvm-unwind.so.1'
 ldd bin/foobar | grep -v 'libgcc'
 
 mv bin/foobar ../project/foobar_cpp_libcpp
 mv bin/foobar_c ../project/foobar_c_libcpp
 
 sudo cp /usr/local/lib64/libstdc++.so.6.0.28 ../project/libstdc++.so.6.0.28
-sudo cp /usr/local/lib/libunwind.so.1.0 ../project/libunwind.so.1.0
+sudo cp /usr/local/lib/libllvm-unwind.so.1.0 ../project/libllvm-unwind.so.1.0
 
-conan create .. foo/0.1@user/testing --build -s compiler.libcxx=libstdc++
-conan install foo/0.1@user/testing -g deploy
+conan create ../project/test/clang/conan foo/0.1@user/testing --build -s compiler.libcxx=libstdc++
+conan install foo/0.1@user/testing -g deploy -s compiler.libcxx=libstdc++
 
 ldd bin/foobar | grep -v 'libc++'
-ldd bin/foobar | grep 'libunwind.so.1 => /usr/local/lib/libunwind.so.1'
+ldd bin/foobar | grep 'libllvm-unwind.so.1 => /usr/local/lib/libllvm-unwind.so.1'
 ldd bin/foobar | grep -v 'libc++abi'
 ldd bin/foobar | grep 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so.1'
 ldd bin/foobar | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6'
@@ -44,11 +43,11 @@ ldd bin/foobar | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6'
 sudo mv bin/foobar ../project/foobar_cpp_libstdcpp
 sudo mv bin/foobar_c ../project/foobar_c_libstdcpp
 
-conan create .. foo/0.1@user/testing --build -s compiler.libcxx=libstdc++11
-conan install foo/0.1@user/testing -g deploy
+conan create ../project/test/clang/conan foo/0.1@user/testing --build -s compiler.libcxx=libstdc++11
+conan install foo/0.1@user/testing -g deploy -s compiler.libcxx=libstdc++11
 
 ldd bin/foobar | grep -v 'libc++'
-ldd bin/foobar | grep 'libunwind.so.1 => /usr/local/lib/libunwind.so.1'
+ldd bin/foobar | grep 'libllvm-unwind.so.1 => /usr/local/lib/libllvm-unwind.so.1'
 ldd bin/foobar | grep -v 'libc++abi'
 ldd bin/foobar | grep 'libgcc_s.so.1 => /usr/local/lib64/libgcc_s.so.1'
 ldd bin/foobar | grep 'libstdc++.so.6 => /usr/local/lib64/libstdc++.so.6'
