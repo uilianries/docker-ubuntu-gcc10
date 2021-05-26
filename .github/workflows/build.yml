@@ -25,7 +25,7 @@ jobs:
     - name: Build ${{ matrix.version }}
       env:
         DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
-      run: docker-compose build --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ ARTIFACTORY_TOKEN }} ${{ matrix.version }}
+      run: docker-compose build --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ secrets.ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ secrets.ARTIFACTORY_TOKEN }} ${{ matrix.version }}
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image ${{ matrix.version }}
@@ -42,7 +42,7 @@ jobs:
     - name: Build ${{ matrix.version }}
       env:
         DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
-      run: docker-compose build --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ ARTIFACTORY_TOKEN }} ${{ matrix.version }}
+      run: docker-compose build --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ secrets.ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ secrets.ARTIFACTORY_TOKEN }} ${{ matrix.version }}
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image ${{ matrix.version }}
