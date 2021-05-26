@@ -39,12 +39,16 @@ ARG GCC_VERSION ARTIFACTORY_REPOSITORY
 COPY --from=builder /tmp/install /usr/local
 COPY --from=builder /tmp/gcc /tmp/gcc
 
-RUN sudo mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
-    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+USER root
+
+RUN mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
+    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && rm -rf /tmp/gcc
 
-RUN sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
-    && sudo update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
-    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
-    && sudo rm /etc/ld.so.cache \
-    && sudo ldconfig -C /etc/ld.so.cache
+RUN update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+    && update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
+    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
+    && rm /etc/ld.so.cache \
+    && ldconfig -C /etc/ld.so.cache
+
+USER conan

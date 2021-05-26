@@ -125,16 +125,20 @@ ARG ARTIFACTORY_REPOSITORY
 COPY --from=builder /tmp/install /usr/local
 COPY --from=builder /tmp/gcc /tmp/gcc
 
-RUN sudo rmdir /usr/local/lib64 \
-    && sudo mv /tmp/gcc/lib64 /usr/local/ \
-    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
-    && sudo cp -a /tmp/gcc/include/* /usr/local/include/ \
-    && sudo cp -a /tmp/gcc/lib/gcc/* /usr/local/lib/ \
+USER root
+
+RUN rmdir /usr/local/lib64 \
+    && mv /tmp/gcc/lib64 /usr/local/ \
+    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && cp -a /tmp/gcc/include/* /usr/local/include/ \
+    && cp -a /tmp/gcc/lib/gcc/* /usr/local/lib/ \
     && rm -rf /tmp/gcc
 
-RUN sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
-    && sudo update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
-    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
-    && sudo update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
-    && sudo rm /etc/ld.so.cache \
-    && sudo ldconfig -C /etc/ld.so.cache
+RUN update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
+    && update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
+    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
+    && update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
+    && rm /etc/ld.so.cache \
+    && ldconfig -C /etc/ld.so.cache
+
+USER conan
