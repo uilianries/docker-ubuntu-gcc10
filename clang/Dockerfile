@@ -127,8 +127,7 @@ COPY --from=builder /tmp/gcc /tmp/gcc
 
 USER root
 
-RUN rmdir /usr/local/lib64 \
-    && mv /tmp/gcc/lib64 /usr/local/ \
+RUN mv /tmp/gcc/lib64 /usr/local/ \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && cp -a /tmp/gcc/include/* /usr/local/include/ \
     && cp -a /tmp/gcc/lib/gcc/* /usr/local/lib/ \
