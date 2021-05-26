@@ -2,17 +2,17 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG LLVM_VERSION
+ARG LLVM_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
 RUN sudo apt-get -qq update \
-    && sudo apt-get -q install -y --no-install-recommends --no-install-suggests apt-transport-https \
+    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 apt-transport-https \
     && printf 'deb http://apt.llvm.org/xenial/   llvm-toolchain-xenial-10  main\n' | sudo tee /etc/apt/sources.list.d/llvm.list \
     && wget -q --no-check-certificate https://apt.llvm.org/llvm-snapshot.gpg.key \
     && sudo apt-key add llvm-snapshot.gpg.key \
     && sudo apt-get -qq update \
-    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests clang-10 lld-10 libc++-10-dev \
+    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 clang-10 lld-10 libc++-10-dev \
     && pip install ninja
 
 RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
@@ -111,17 +111,30 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
 RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
     && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib
 
+RUN tar zcf clang-${LLVM_VERSION}.tar.gz -C /tmp/install . \
+    && curl -s -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}" -T clang-${LLVM_VERSION}.tar.gz "${ARTIFACTORY_REPOSITORY}/clang-${LLVM_VERSION}.tar.gz"
+
+RUN mkdir /tmp/gcc \
+    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-10.3.0.tar.gz" \
+    && tar zxf gcc-10.3.0.tar.gz -C /tmp/gcc
+
 FROM ${DOCKER_REPOSITORY}/base as final
 
-COPY --from=builder /tmp/install /tmp/install
+ARG ARTIFACTORY_REPOSITORY
 
-RUN sudo mv /tmp/install/bin/* /usr/local/bin \
-    && sudo mv /tmp/install/lib/* /usr/local/lib \
-    && sudo cp -a /tmp/install/include/* /usr/local/include \
-    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
+COPY --from=builder /tmp/install /usr/local
+COPY --from=builder /tmp/gcc /tmp/gcc
+
+RUN sudo rmdir /usr/local/lib64 \
+    && sudo mv /tmp/gcc/lib64 /usr/local/ \
+    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && sudo cp -a /tmp/gcc/include/* /usr/local/include/ \
+    && sudo cp -a /tmp/gcc/lib/gcc/* /usr/local/lib/ \
+    && rm -rf /tmp/gcc
+
+RUN sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
     && sudo update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
     && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
     && sudo update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
-    && sudo rm -rf /tmp/install \
     && sudo rm /etc/ld.so.cache \
     && sudo ldconfig -C /etc/ld.so.cache

@@ -2,12 +2,12 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG GCC_VERSION
+ARG GCC_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
 RUN sudo apt-get -qq update \
-    && sudo apt-get -q install -y g++-multilib gcc --no-install-recommends --no-install-suggests
+    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 g++-multilib gcc
 
 RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
     && tar Jxf gcc-${GCC_VERSION}.tar.xz
@@ -25,20 +25,26 @@ RUN cd gcc-${GCC_VERSION} \
     && make -s -j$(nproc) \
     && make install-strip
 
+RUN tar zcf gcc-${GCC_VERSION}.tar.gz -C /tmp/install . \
+    && curl -s -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}" -T gcc-${GCC_VERSION}.tar.gz "${ARTIFACTORY_REPOSITORY}/gcc-${GCC_VERSION}.tar.gz"
+
+RUN mkdir /tmp/gcc \
+    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-10.3.0.tar.gz" \
+    && tar zxf gcc-10.3.0.tar.gz -C /tmp/gcc
+
 FROM ${DOCKER_REPOSITORY}/base as final
 
-ARG GCC_VERSION
+ARG GCC_VERSION ARTIFACTORY_REPOSITORY
 
-COPY --from=builder /tmp/install /tmp/install
+COPY --from=builder /tmp/install /usr/local
+COPY --from=builder /tmp/gcc /tmp/gcc
 
-RUN sudo mv /tmp/install/bin/* /usr/local/bin \
-    && sudo rm -rf /usr/local/lib/gcc \
-    && sudo mv /tmp/install/lib/* /usr/local/lib \
-    && sudo mv /tmp/install/libexec /usr/local/libexec \
-    && sudo mv /tmp/install/include/c++/${GCC_VERSION}/* /usr/local/include/ \
-    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+RUN && sudo mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
+    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && rm -rf /tmp/gcc
+
+RUN sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
     && sudo update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
     && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
-    && sudo rm -rf /tmp/install \
     && sudo rm /etc/ld.so.cache \
     && sudo ldconfig -C /etc/ld.so.cache

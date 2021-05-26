@@ -5,12 +5,12 @@ LABEL maintainer="Conan.io <info@conan.io>"
 ENV PYENV_ROOT=/opt/pyenv \
     PATH=/opt/pyenv/shims:${PATH}
 
-ARG GCC_VERSION CMAKE_VERSION CMAKE_VERSION_FULL PYTHON_VERSION
+ARG CONAN_VERSION CMAKE_VERSION CMAKE_VERSION_FULL PYTHON_VERSION
 
 WORKDIR /root
 
 RUN apt-get -qq update \
-    && apt-get -qq install -y --no-install-recommends \
+    && apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 \
        sudo \
        binutils \
        wget \
@@ -37,14 +37,6 @@ RUN apt-get -qq update \
        ca-certificates \
        autoconf-archive \
     && rm -rf /var/lib/apt/lists/*
-
-RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
-    && tar Jxf gcc-${GCC_VERSION}.tar.xz \
-    && cd gcc-${GCC_VERSION} \
-    && ./configure --build=x86_64-linux-gnu --disable-bootstrap --disable-multilib --disable-nsl --enable-languages=c,c++,fortran --without-isl --with-system-zlib --prefix=/tmp/base \
-    && make -j$(nproc) \
-    && make install-strip \
-    && rm -rf /root/gcc-${GCC_VERSION}.tar.xz /root/gcc-${GCC_VERSION}
 
 RUN wget -q --no-check-certificate https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.tar.gz \
     && tar -xzf cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.tar.gz \
@@ -85,16 +77,10 @@ RUN chown -R conan:1001 /opt/pyenv \
     && update-alternatives --install /usr/local/bin/pip pip /opt/pyenv/shims/pip 100
 
 RUN pip install -q --upgrade --no-cache-dir pip \
-    pip install -q --no-cache-dir conan conan-package-tools
-
-RUN mv /tmp/base/lib64 /usr/local \
-    && mv /tmp/base/include/* /usr/local/include \
-    && mv /tmp/base/lib/gcc /usr/local/lib \
-    && rm -rf /tmp/base
+    pip install -q --no-cache-dir conan==${CONAN_VERSION} conan-package-tools
 
 RUN printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && printf '/usr/local/lib64\n' >> /etc/ld.so.conf.d/20local-lib.conf \
-    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && mv /etc/ld.so.conf.d/libc.conf /etc/ld.so.conf.d/10libc.conf \
     && mv /etc/ld.so.conf.d/x86_64-linux-gnu.conf /etc/ld.so.conf.d/30x86_64-linux-gnu.conf \
     && mv /etc/ld.so.conf.d/zz_i386-biarch-compat.conf /etc/ld.so.conf.d/40zz_i386-biarch-compat.conf \
@@ -102,9 +88,9 @@ RUN printf '/usr/local/lib\n' > /etc/ld.so.conf.d/20local-lib.conf \
     && rm /etc/ld.so.cache \
     && ldconfig -C /etc/ld.so.cache
 
-RUN apt-get purge -y g++-multilib gcc gcc-5 \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
+RUN apt-get -qq purge -y g++-multilib gcc gcc-5 \
+    && apt-get -qq autoremove -y \
+    && apt-get -qq autoclean \
     && apt-get -qq update \
     && rm -rf /var/lib/apt/lists/*
 
