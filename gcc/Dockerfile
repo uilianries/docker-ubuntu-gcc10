@@ -39,7 +39,7 @@ ARG GCC_VERSION ARTIFACTORY_REPOSITORY
 COPY --from=builder /tmp/install /usr/local
 COPY --from=builder /tmp/gcc /tmp/gcc
 
-RUN && sudo mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
+RUN sudo mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
     && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && rm -rf /tmp/gcc
 
