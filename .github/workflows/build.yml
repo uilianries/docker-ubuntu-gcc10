@@ -15,7 +15,6 @@ jobs:
     - name: Docker Upload image base
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/base
   build-gcc:
-    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -48,7 +47,7 @@ jobs:
     - name: Docker Upload image ${{ matrix.version }}
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
   test-gcc:
-    if: False
+    needs: build-gcc
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

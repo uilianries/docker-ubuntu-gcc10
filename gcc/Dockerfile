@@ -2,7 +2,7 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG GCC_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY
+ARG GCC_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
@@ -29,20 +29,29 @@ RUN tar zcf gcc-${GCC_VERSION}.tar.gz -C /tmp/install . \
     && curl -s -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}" -T gcc-${GCC_VERSION}.tar.gz "${ARTIFACTORY_REPOSITORY}/gcc-${GCC_VERSION}.tar.gz"
 
 RUN mkdir /tmp/gcc \
-    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-10.3.0.tar.gz" \
-    && tar zxf gcc-10.3.0.tar.gz -C /tmp/gcc
+    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
+    && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
 
 FROM ${DOCKER_REPOSITORY}/base as final
 
 ARG GCC_VERSION ARTIFACTORY_REPOSITORY
 
-COPY --from=builder /tmp/install /usr/local
+COPY --from=builder /tmp/install /tmp/install
 COPY --from=builder /tmp/gcc /tmp/gcc
 
 USER root
 
+RUN rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
+    && cp -a /tmp/install/lib/gcc/x86_64-linux-gnu/${GCC_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
+    && cp -a /tmp/install/include/* /usr/local/include/ \
+    && cp -a /tmp/install/lib64/ /usr/local/ \
+    && cp -a /tmp/install/lib/* /usr/local/lib/ \
+    && cp -a /tmp/install/bin/* /usr/local/bin/ \
+    && rm -rf /tmp/install
+
 RUN mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
     && rm -rf /tmp/gcc
 
 RUN update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \

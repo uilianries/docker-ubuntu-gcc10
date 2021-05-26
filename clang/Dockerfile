@@ -2,7 +2,7 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG LLVM_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY
+ARG LLVM_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
@@ -105,7 +105,7 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && ninja compiler-rt \
     && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt
 
-# FIXME: Clang 9 and 10 fail to build libcxx because they try to link from system.
+# FIXME: Clang 9 and 10 fail to build libcxx because they try to link libc++abi from system.
 #        We could add a patch with target_link_directories, but I prefered copying libc++abi to /usr/lib
 
 RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
@@ -115,23 +115,31 @@ RUN tar zcf clang-${LLVM_VERSION}.tar.gz -C /tmp/install . \
     && curl -s -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}" -T clang-${LLVM_VERSION}.tar.gz "${ARTIFACTORY_REPOSITORY}/clang-${LLVM_VERSION}.tar.gz"
 
 RUN mkdir /tmp/gcc \
-    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-10.3.0.tar.gz" \
-    && tar zxf gcc-10.3.0.tar.gz -C /tmp/gcc
+    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
+    && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
 
 FROM ${DOCKER_REPOSITORY}/base as final
 
-ARG ARTIFACTORY_REPOSITORY
+ARG ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
 
-COPY --from=builder /tmp/install /usr/local
+COPY --from=builder /tmp/install /tmp/clang
 COPY --from=builder /tmp/gcc /tmp/gcc
 
 USER root
 
 RUN mv /tmp/gcc/lib64 /usr/local/ \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
     && cp -a /tmp/gcc/include/* /usr/local/include/ \
-    && cp -a /tmp/gcc/lib/gcc/* /usr/local/lib/ \
+    && rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
+    && cp -a /tmp/gcc/lib/gcc/x86_64-linux-gnu/${LIBSTDCPP_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
+    && cp -a /tmp/gcc/lib/* /usr/local/lib/ \
     && rm -rf /tmp/gcc
+
+RUN cp -a /tmp/clang/bin/* /usr/local/bin/ \
+    && cp -a /tmp/clang/lib/* /usr/local/lib/ \
+    && cp -a /tmp/clang/include/* /usr/local/include/ \
+    && rm -rf /tmp/clang
 
 RUN update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
     && update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \

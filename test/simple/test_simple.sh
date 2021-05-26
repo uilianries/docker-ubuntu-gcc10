@@ -12,3 +12,8 @@ cmake --build .
 
 ./example-c
 ./example-cpp
+
+if [ -f /usr/local/bin/clang ]; then
+    ./example-c-clang
+    ./example-cpp-clang
+fi

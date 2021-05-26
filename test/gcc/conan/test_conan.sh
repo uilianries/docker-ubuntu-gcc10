@@ -10,6 +10,7 @@ cpp --version
 cc --version
 
 export CONAN_PRINT_RUN_COMMANDS=1
+export CONAN_PRINT_RUN_COMMANDS=1
 
 mkdir -p /tmp/build
 rm -rf /tmp/build/*
