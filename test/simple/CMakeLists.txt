@@ -9,7 +9,7 @@ target_compile_options(example-c PRIVATE -v)
 
 add_executable(example-cpp main.cpp)
 set_target_properties(example-cpp PROPERTIES CXX_STANDARD 11)
-target_compile_options(example-cpp PRIVATE -v  -stdlib=libstdc++)
+target_compile_options(example-cpp PRIVATE -v)
 
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
