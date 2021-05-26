@@ -45,6 +45,7 @@ RUN rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
     && cp -a /tmp/install/lib/gcc/x86_64-linux-gnu/${GCC_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
     && cp -a /tmp/install/include/* /usr/local/include/ \
     && cp -a /tmp/install/lib64/ /usr/local/ \
+    && cp -a /tmp/install/libexec/ /usr/local/ \
     && cp -a /tmp/install/lib/* /usr/local/lib/ \
     && cp -a /tmp/install/bin/* /usr/local/bin/ \
     && rm -rf /tmp/install
