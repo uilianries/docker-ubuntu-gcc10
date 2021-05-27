@@ -32,6 +32,10 @@ sudo mv bin/foobar_c ../project/foobar_c_libcpp
 sudo cp /usr/local/lib64/libstdc++.so.6.0.28 ../project/libstdc++.so.6.0.28
 sudo cp /usr/local/lib/libllvm-unwind.so.1.0 ../project/libllvm-unwind.so.1.0
 
+sudo cp /usr/local/lib/libllvm-unwind.so.1.0 ../project/libllvm-unwind.so.1.0
+sudo cp /usr/local/lib/libc++.so.1.0 ../project/libc++.so.1.0
+sudo cp /usr/local/lib/libc++abi.so.1.0 ../project/libc++abi.so.1.0
+
 conan create ../project/test/clang/conan foo/0.1@user/testing --build -s compiler.libcxx=libstdc++
 conan install foo/0.1@user/testing -g deploy -s compiler.libcxx=libstdc++
 
