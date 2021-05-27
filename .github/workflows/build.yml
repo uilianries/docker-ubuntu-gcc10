@@ -49,6 +49,7 @@ jobs:
     - name: Docker Upload image ${{ matrix.version }}
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
   test-gcc:
+    if: False
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

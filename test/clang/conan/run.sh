@@ -17,7 +17,8 @@ docker rm ${compiler}
 # Mount Vanilla Ubuntu Xenial and run executables built with libstdc++.so.0.6.28
 docker run -t -d -v ${PWD}:/tmp/project --name ubuntu ubuntu:xenial
 
-docker exec -w /tmp/project ubuntu cp libunwind.so.1.0 /usr/lib/x86_64-linux-gnu/libunwind.so.1
+docker exec -w /tmp/project ubuntu cp libllvm-unwind.so.1.0 /usr/lib/x86_64-linux-gnu/libllvm-unwind.so.1.0
+docker exec -w /tmp/project ubuntu cp libllvm-unwind.so.1.0 /usr/lib/x86_64-linux-gnu/libunwind.so.1.0
 docker exec -w /tmp/project ubuntu cp libstdc++.so.6.0.28 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21
 
 docker exec -w /tmp/project ubuntu ./foobar_cpp_libcpp
