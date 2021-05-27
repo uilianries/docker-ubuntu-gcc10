@@ -13,12 +13,10 @@ RUN sudo apt-get -qq update \
     && sudo apt-key add llvm-snapshot.gpg.key \
     && sudo apt-get -qq update \
     && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 clang-10 lld-10 libc++-10-dev \
-    && pip install ninja
-
-RUN wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
-    && tar zxf llvmorg-${LLVM_VERSION}.tar.gz
-
-RUN sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
+    && pip install ninja \
+    && wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
+    && tar zxf llvmorg-${LLVM_VERSION}.tar.gz \
+    && sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
     && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
 
 RUN cd llvm-project-llvmorg-${LLVM_VERSION} \

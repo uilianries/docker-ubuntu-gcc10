@@ -8,8 +8,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 RUN sudo apt-get -qq update \
     && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 g++-multilib gcc \
-
-RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
+    && wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
     && tar Jxf gcc-${GCC_VERSION}.tar.xz
 
 RUN cd gcc-${GCC_VERSION} \
