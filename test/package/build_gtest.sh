@@ -3,7 +3,7 @@
 set -ex
 
 GTEST_FOLDER=/home/conan/conan-center-index/recipes/gtest/all
-GTEST_VERSION=gtest/1.8.1
+GTEST_VERSION=1.8.1
 
 export CONAN_PRINT_RUN_COMMANDS=1
 
