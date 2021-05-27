@@ -2,7 +2,6 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
-    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -15,7 +14,7 @@ jobs:
     - name: Docker Upload image base
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/base
   build-gcc:
-    if: False
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -32,7 +31,7 @@ jobs:
     - name: Docker Upload image ${{ matrix.version }}
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
   build-clang:
-    if: False
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -49,6 +48,7 @@ jobs:
     - name: Docker Upload image ${{ matrix.version }}
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
   test-gcc:
+    needs: build-gcc
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -83,6 +83,7 @@ jobs:
         test/gcc/fortran/run.sh ${{ matrix.version }}
         test/gcc/conan/run.sh ${{ matrix.version }}
   test-clang:
+    needs: build-clang
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

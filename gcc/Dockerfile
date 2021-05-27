@@ -7,7 +7,7 @@ ARG GCC_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.
 LABEL maintainer="Conan.io <info@conan.io>"
 
 RUN sudo apt-get -qq update \
-    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 g++-multilib gcc
+    && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 g++-multilib gcc \
 
 RUN wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
     && tar Jxf gcc-${GCC_VERSION}.tar.xz
@@ -48,14 +48,12 @@ RUN rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
     && cp -a /tmp/install/libexec/ /usr/local/ \
     && cp -a /tmp/install/lib/* /usr/local/lib/ \
     && cp -a /tmp/install/bin/* /usr/local/bin/ \
-    && rm -rf /tmp/install
-
-RUN mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
+    && rm -rf /tmp/install \
+    && mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
     && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
     && ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
-    && rm -rf /tmp/gcc
-
-RUN update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+    && rm -rf /tmp/gcc \
+    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
     && update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
     && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
     && rm /etc/ld.so.cache \

@@ -134,14 +134,12 @@ RUN mv /tmp/gcc/lib64 /usr/local/ \
     && rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
     && cp -a /tmp/gcc/lib/gcc/x86_64-linux-gnu/${LIBSTDCPP_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
     && cp -a /tmp/gcc/lib/* /usr/local/lib/ \
-    && rm -rf /tmp/gcc
-
-RUN cp -a /tmp/clang/bin/* /usr/local/bin/ \
+    && rm -rf /tmp/gcc \
+    && cp -a /tmp/clang/bin/* /usr/local/bin/ \
     && cp -a /tmp/clang/lib/* /usr/local/lib/ \
     && cp -a /tmp/clang/include/* /usr/local/include/ \
-    && rm -rf /tmp/clang
-
-RUN update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
+    && rm -rf /tmp/clang \
+    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
     && update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
     && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
     && update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
