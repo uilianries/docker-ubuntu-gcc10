@@ -111,9 +111,6 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
 RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
     && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib
 
-RUN tar zcf clang-${LLVM_VERSION}.tar.gz -C /tmp/install . \
-    && curl -s -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}" -T clang-${LLVM_VERSION}.tar.gz "${ARTIFACTORY_REPOSITORY}/clang-${LLVM_VERSION}.tar.gz"
-
 RUN mkdir /tmp/gcc \
     && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
     && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc

@@ -25,9 +25,6 @@ RUN cd gcc-${GCC_VERSION} \
     && make -s -j$(nproc) \
     && make install-strip
 
-RUN tar zcf gcc-${GCC_VERSION}.tar.gz -C /tmp/install . \
-    && curl -s -H "X-JFrog-Art-Api:${ARTIFACTORY_TOKEN}" -T gcc-${GCC_VERSION}.tar.gz "${ARTIFACTORY_REPOSITORY}/gcc-${GCC_VERSION}.tar.gz"
-
 RUN mkdir /tmp/gcc \
     && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
     && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
