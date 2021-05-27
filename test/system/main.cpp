@@ -1,38 +1,25 @@
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include "GL/freeglut.h"
+#include "libusb-1.0/libusb.h"
 
 
-void error_handler(const char *fmt, va_list ap) {
-    std::cerr << "glut error: ";
-    vfprintf(stderr, fmt, ap);
-    std::cerr << std::endl;
-}
+int main(int argc, char *argv[]) {
+	libusb_device **devs;
+	ssize_t cnt;
+	int r, i;
 
-void warning_handler(const char *fmt, va_list ap) {
-    std::cout << "glut warning: ";
-    vfprintf(stdout, fmt, ap);
-    std::cout << std::endl;
-}
+	r = libusb_init(NULL);
+	if (r < 0)
+		return r;
 
-void renderScene(void) {
+	cnt = libusb_get_device_list(NULL, &devs);
+	if (cnt < 0)
+		return (int)cnt;
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	libusb_free_device_list(devs, 1);
+	libusb_exit(NULL);
 
-    glBegin(GL_TRIANGLES);
-        glVertex3f(-0.5,-0.5,0.0);
-        glVertex3f(0.5,0.0,0.0);
-        glVertex3f(0.0,0.5,0.0);
-    glEnd();
+    std::cout << "That's all folks!" << std::endl;
 
-        glutSwapBuffers();
-}
-
-int main(int argc, char **argv) {
-    glutInit(&argc, argv);
-    glutInitErrorFunc(error_handler);
-    glutInitWarningFunc(warning_handler);
-    std::cout << "FreeGLUT version: " << glutGet(GLUT_VERSION) << std::endl;
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

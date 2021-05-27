@@ -18,7 +18,7 @@ docker exec ${compiler} sudo apt-get -qq update
 docker exec ${compiler} sudo apt-get -qq install -y --force-yes --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 g++-9
 
 docker exec ${compiler} mkdir /tmp/build
-docker exec -w /tmp/build ${compiler} conan install ../project/test/system
+docker exec -w /tmp/build ${compiler} conan install ../project/test/system --build
 docker exec -w /tmp/build ${compiler} cmake ../project/test/system -DCMAKE_BUILD_TYPE=Release
 docker exec -w /tmp/build ${compiler} cmake --build .
 docker exec -w /tmp/build ${compiler} ldd bin/package_test
