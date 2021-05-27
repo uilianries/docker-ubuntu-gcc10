@@ -3,7 +3,7 @@
 set -ex
 
 POCO_FOLDER=/home/conan/conan-center-index/recipes/poco/all
-POCO_VERSION=3.15.5
+POCO_VERSION=1.9.4
 
 export CONAN_PRINT_RUN_COMMANDS=1
 
