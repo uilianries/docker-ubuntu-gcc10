@@ -2,7 +2,7 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG LLVM_VERSION ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
+ARG LLVM_VERSION ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
@@ -110,9 +110,9 @@ RUN sudo apt-get -qq update \
 # FIXME: Clang 9 and 10 fail to build libcxx because they try to link libc++abi from system.
 #        We could add a patch with target_link_directories, but I prefered copying libc++abi to /usr/lib
 
-FROM ${DOCKER_REPOSITORY}/base as final
+FROM ${DOCKER_REPOSITORY}/base as deploy
 
-ARG CONAN_VERSION LIBSTDCPP_VERSION=10.3.0
+ARG CONAN_VERSION LIBSTDCPP_VERSION
 
 COPY --from=builder /tmp/install /tmp/clang
 COPY --from=builder /tmp/gcc /tmp/gcc

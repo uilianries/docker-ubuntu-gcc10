@@ -7,7 +7,7 @@ compiler=$1
 docker rm -f ${compiler}
 
 docker pull ${DOCKER_REPOSITORY}/${compiler}
-docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
+docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}-ubuntu16.04
 
 docker exec ${compiler} conan config init --force
 docker exec ${compiler} conan config set general.sysrequires_mode=enabled

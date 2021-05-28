@@ -4,8 +4,8 @@ set -ex
 
 compiler=$1
 
-docker pull ${DOCKER_REPOSITORY}/${compiler}
-docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}
+docker pull ${DOCKER_REPOSITORY}/${compiler}-ubuntu16.04
+docker run -t -d -v ${PWD}:/tmp/project --name ${compiler} ${DOCKER_REPOSITORY}/${compiler}-ubuntu16.04
 docker exec ${compiler} /tmp/project/test/gcc/conan/test_conan.sh
 
 docker stop ${compiler}

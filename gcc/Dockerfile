@@ -26,9 +26,9 @@ RUN sudo apt-get -qq update \
     && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
     && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
 
-FROM ${DOCKER_REPOSITORY}/base as final
+FROM ${DOCKER_REPOSITORY}/base as deploy
 
-ARG CONAN_VERSION LIBSTDCPP_VERSION=10.3.0
+ARG LIBSTDCPP_VERSION
 
 COPY --from=builder /tmp/install /tmp/install
 COPY --from=builder /tmp/gcc /tmp/gcc
@@ -49,5 +49,10 @@ RUN sudo rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
     && sudo update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
     && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
     && sudo rm /etc/ld.so.cache \
-    && sudo ldconfig -C /etc/ld.so.cache \
-    && pip install conan==${CONAN_VERSION}
+    && sudo ldconfig -C /etc/ld.so.cache
+
+FROM deploy as conan
+
+ARG CONAN_VERSION
+
+RUN pip install conan==${CONAN_VERSION}

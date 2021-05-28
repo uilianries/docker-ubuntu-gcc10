@@ -64,7 +64,6 @@ RUN apt-get -qq update \
     && update-alternatives --install /usr/bin/pyenv pyenv /opt/pyenv/bin/pyenv 100 \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install ${PYTHON_VERSION} \
     && pyenv global ${PYTHON_VERSION} \
-    && chown -R conan:1001 /opt/pyenv \
     && find /opt/pyenv -iname __pycache__ -print0 | xargs -0 rm -rf \
     && update-alternatives --install /usr/bin/python3 python3 /opt/pyenv/shims/python3 100 \
     && update-alternatives --install /usr/bin/pip3 pip3 /opt/pyenv/shims/pip3 100 \
@@ -86,7 +85,8 @@ RUN apt-get -qq update \
     && apt-get -qq update \
     && rm -rf /var/lib/apt/lists/* \
     && runuser -u conan -- printf 'eval "$(pyenv init -)"\n' >> /home/conan/.bashrc \
-    && runuser -u conan -- printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc
+    && runuser -u conan -- printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc \
+    && chown -R conan:1001 /opt/pyenv
 
 USER conan
 WORKDIR /home/conan
