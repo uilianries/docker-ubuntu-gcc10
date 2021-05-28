@@ -12,7 +12,7 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image base
-      run: docker-compose push base
+      run: docker-compose push  --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ secrets.ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ secrets.ARTIFACTORY_TOKEN }} base
   build-gcc:
     needs: base
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image ${{ matrix.version }}
-      run: docker-compose push ${{ matrix.version }}
+      run: docker-compose push --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ secrets.ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ secrets.ARTIFACTORY_TOKEN }} ${{ matrix.version }}
   build-clang:
     needs: base
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image ${{ matrix.version }}
-      run: docker-compose push ${{ matrix.version }}
+      run: docker-compose push  --build-arg DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} --build-arg ARTIFACTORY_REPOSITORY=${{ secrets.ARTIFACTORY_REPOSITORY }} --build-arg ARTIFACTORY_TOKEN=${{ secrets.ARTIFACTORY_TOKEN }} ${{ matrix.version }}
   test-gcc:
     needs: build-gcc
     runs-on: ubuntu-latest
