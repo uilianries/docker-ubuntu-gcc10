@@ -17,8 +17,8 @@ jobs:
       run: |
         docker-compose push base
         export CONAN_VERSION=$(grep CONAN_VERSION .env | cut -d "=" -f 2-)
-        docker tag ${{ secrets.DOCKER_REPOSITORY }}/base:${CONAN_VERSION} ${{ secrets.DOCKER_REPOSITORY }}/base:latest
-        docker push ${{ secrets.DOCKER_REPOSITORY }}/base:latest
+        docker tag ${{ secrets.DOCKER_REPOSITORY }}/base-ubuntu16.04:${CONAN_VERSION} ${{ secrets.DOCKER_REPOSITORY }}/base-ubuntu16.04:latest
+        docker push ${{ secrets.DOCKER_REPOSITORY }}/base-ubuntu16.04:latest
   build-gcc:
     needs: base
     runs-on: ubuntu-latest
