@@ -2,7 +2,7 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG GCC_VERSION ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
+ARG GCC_VERSION ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
@@ -28,13 +28,13 @@ RUN sudo apt-get -qq update \
 
 FROM ${DOCKER_REPOSITORY}/base as deploy
 
-ARG LIBSTDCPP_VERSION
+ARG GCC_VERSION
 
 COPY --from=builder /tmp/install /tmp/install
 COPY --from=builder /tmp/gcc /tmp/gcc
 
 RUN sudo rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
-    && sudo cp -a /tmp/install/lib/gcc/x86_64-linux-gnu/${LIBSTDCPP_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
+    && sudo cp -a /tmp/install/lib/gcc/x86_64-linux-gnu/${GCC_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
     && sudo cp -a /tmp/install/include/* /usr/local/include/ \
     && sudo cp -a /tmp/install/lib64/ /usr/local/ \
     && sudo cp -a /tmp/install/libexec/ /usr/local/ \
