@@ -9,7 +9,7 @@ services:
                 CMAKE_VERSION: ${CMAKE_VERSION}
                 PYTHON_VERSION: ${PYTHON_VERSION}
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/base-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/base-ubuntu16.04:${CONAN_VERSION}
         container_name: base
         tty: true
 
@@ -23,7 +23,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc5-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc5-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc5-builder
         tty: true
     gcc6-builder:
@@ -36,7 +36,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc6-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc6-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc6-builder
         tty: true
     gcc7-builder:
@@ -49,7 +49,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc7-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc7-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc7-builder
         tty: true
     gcc8-builder:
@@ -62,7 +62,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc8-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc8-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc8-builder
         tty: true
     gcc9-builder:
@@ -75,7 +75,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc9-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc9-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc9-builder
         tty: true
     gcc10-builder:
@@ -88,7 +88,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc10-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc10-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10-builder
         tty: true
     gcc11-builder:
@@ -101,7 +101,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc11-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc11-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc11-builder
         tty: true
     clang9-builder:
@@ -114,7 +114,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang9-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang9-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang9-builder
         tty: true
     clang10-builder:
@@ -127,7 +127,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang10-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang10-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang10-builder
         tty: true
     clang11-builder:
@@ -140,7 +140,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang11-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang11-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang11-builder
         tty: true
     clang12-builder:
@@ -153,7 +153,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang12-builder-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang12-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang12-builder
         tty: true
 
@@ -163,11 +163,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc5-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc5-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc5-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc5-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc5-deploy
         tty: true
     gcc6-deploy:
@@ -176,11 +176,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc6-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc6-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc6-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc6-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc6-deploy
         tty: true
     gcc7-deploy:
@@ -189,11 +189,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc7-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc7-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc7-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc7-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc7-deploy
         tty: true
     gcc8-deploy:
@@ -202,11 +202,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc8-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc8-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc8-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc8-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc8-deploy
         tty: true
     gcc9-deploy:
@@ -215,11 +215,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc9-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc9-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc9-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc9-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc9-deploy
         tty: true
     gcc10-deploy:
@@ -228,11 +228,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc10-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc10-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc10-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc10-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10-deploy
         tty: true
     gcc11-deploy:
@@ -241,11 +241,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc11-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc11-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/gcc11-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc11-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc11-deploy
         tty: true
     clang9-deploy:
@@ -254,11 +254,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang9-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang9-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang9-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang9-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang9-deploy
         tty: true
     clang10-deploy:
@@ -267,11 +267,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang10-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang10-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang10-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang10-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang10-deploy
         tty: true
     clang11-deploy:
@@ -280,11 +280,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang11-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang11-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang11-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang11-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang11-deploy
         tty: true
     clang12-deploy:
@@ -293,11 +293,11 @@ services:
             dockerfile: Dockerfile
             target: deploy
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang12-builder-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang12-builder-ubuntu16.04:${CONAN_VERSION}
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
-        image: ${DOCKER_REPOSITORY}/clang12-deploy-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang12-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang12-deploy
         tty: true
 
@@ -309,10 +309,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc5-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc5-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc5-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc5-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc5-conan
         tty: true
     gcc6-conan:
@@ -321,10 +321,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc6-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc6-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc6-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc6-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc6-conan
         tty: true
     gcc7-conan:
@@ -333,10 +333,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc7-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc7-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc7-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc7-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc7-conan
         tty: true
     gcc8-conan:
@@ -345,10 +345,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc8-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc8-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc8-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc8-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc8-conan
         tty: true
     gcc9-conan:
@@ -357,10 +357,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc9-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc9-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc9-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc9-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc9-conan
         tty: true
     gcc10-conan:
@@ -369,10 +369,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc10-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc10-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc10-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc10-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10-conan
         tty: true
     gcc11-conan:
@@ -381,10 +381,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/gcc11-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/gcc11-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc11-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc11-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc11-conan
         tty: true
     clang9-conan:
@@ -393,10 +393,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang9-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang9-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang9-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang9-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: clang9-conan
         tty: true
     clang10-conan:
@@ -405,10 +405,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang10-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang10-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang10-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang10-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: clang10-conan
         tty: true
     clang11-conan:
@@ -417,10 +417,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang11-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang11-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang11-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang11-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: clang11-conan
         tty: true
     clang12-conan:
@@ -429,10 +429,10 @@ services:
             dockerfile: Dockerfile
             target: conan
             cache_from:
-              - ${DOCKER_REPOSITORY}/clang12-deploy-ubuntu16.04
+              - ${DOCKER_REPOSITORY}/clang12-deploy-ubuntu16.04:${CONAN_VERSION}
             args:
                 CONAN_VERSION: ${CONAN_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang12-conan-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang12-conan-ubuntu16.04:${CONAN_VERSION}
         container_name: clang12-conan
         tty: true
 
@@ -445,7 +445,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc5-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc5-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc5
         tty: true
     gcc6:
@@ -457,7 +457,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc6-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc6-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc6
         tty: true
     gcc7:
@@ -469,7 +469,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc7-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc7-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc7
         tty: true
     gcc8:
@@ -481,7 +481,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc8-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc8-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc8
         tty: true
     gcc9:
@@ -493,7 +493,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc9-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc9-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc9
         tty: true
     gcc10:
@@ -505,7 +505,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc10-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc10-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10
         tty: true
     gcc11:
@@ -517,7 +517,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/gcc11-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/gcc11-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10
         tty: true
     clang9:
@@ -529,7 +529,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang9-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang9-ubuntu16.04:${CONAN_VERSION}
         container_name: clang9
         tty: true
     clang10:
@@ -541,7 +541,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang10-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang10-ubuntu16.04:${CONAN_VERSION}
         container_name: clang10
         tty: true
     clang11:
@@ -553,7 +553,7 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang11-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang11-ubuntu16.04:${CONAN_VERSION}
         container_name: clang11
         tty: true
     clang12:
@@ -565,6 +565,6 @@ services:
                 CONAN_VERSION: ${CONAN_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-        image: ${DOCKER_REPOSITORY}/clang12-ubuntu16.04
+        image: ${DOCKER_REPOSITORY}/clang12-ubuntu16.04:${CONAN_VERSION}
         container_name: clang12
         tty: true
