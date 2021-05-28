@@ -2,16 +2,15 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG GCC_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
+ARG GCC_VERSION ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
 RUN sudo apt-get -qq update \
     && sudo apt-get -qq install -y --no-install-recommends --no-install-suggests -o=Dpkg::Use-Pty=0 g++-multilib gcc \
     && wget -q --no-check-certificate http://mirrors.concertpass.com/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
-    && tar Jxf gcc-${GCC_VERSION}.tar.xz
-
-RUN cd gcc-${GCC_VERSION} \
+    && tar Jxf gcc-${GCC_VERSION}.tar.xz \
+    && cd gcc-${GCC_VERSION} \
     && ./configure --build=x86_64-linux-gnu \
                    --disable-bootstrap \
                    --disable-multilib \
@@ -22,37 +21,33 @@ RUN cd gcc-${GCC_VERSION} \
                    --with-system-zlib \
                    --prefix=/tmp/install \
     && make -s -j$(nproc) \
-    && make install-strip
-
-RUN mkdir /tmp/gcc \
+    && make install-strip \
+    && mkdir /tmp/gcc \
     && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
     && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
 
 FROM ${DOCKER_REPOSITORY}/base as final
 
-ARG GCC_VERSION ARTIFACTORY_REPOSITORY
+ARG CONAN_VERSION LIBSTDCPP_VERSION=10.3.0
 
 COPY --from=builder /tmp/install /tmp/install
 COPY --from=builder /tmp/gcc /tmp/gcc
 
-USER root
-
-RUN rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
-    && cp -a /tmp/install/lib/gcc/x86_64-linux-gnu/${GCC_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
-    && cp -a /tmp/install/include/* /usr/local/include/ \
-    && cp -a /tmp/install/lib64/ /usr/local/ \
-    && cp -a /tmp/install/libexec/ /usr/local/ \
-    && cp -a /tmp/install/lib/* /usr/local/lib/ \
-    && cp -a /tmp/install/bin/* /usr/local/bin/ \
-    && rm -rf /tmp/install \
-    && mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
-    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
-    && ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
-    && rm -rf /tmp/gcc \
-    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
-    && update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
-    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
-    && rm /etc/ld.so.cache \
-    && ldconfig -C /etc/ld.so.cache
-
-USER conan
+RUN sudo rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
+    && sudo cp -a /tmp/install/lib/gcc/x86_64-linux-gnu/${LIBSTDCPP_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
+    && sudo cp -a /tmp/install/include/* /usr/local/include/ \
+    && sudo cp -a /tmp/install/lib64/ /usr/local/ \
+    && sudo cp -a /tmp/install/libexec/ /usr/local/ \
+    && sudo cp -a /tmp/install/lib/* /usr/local/lib/ \
+    && sudo cp -a /tmp/install/bin/* /usr/local/bin/ \
+    && sudo rm -rf /tmp/install \
+    && sudo mv /tmp/gcc/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6.0.28 \
+    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
+    && sudo rm -rf /tmp/gcc \
+    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/gcc 100 \
+    && sudo update-alternatives --install /usr/local/bin/cpp cpp /usr/local/bin/g++ 100 \
+    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/g++ 100 \
+    && sudo rm /etc/ld.so.cache \
+    && sudo ldconfig -C /etc/ld.so.cache \
+    && pip install conan==${CONAN_VERSION}

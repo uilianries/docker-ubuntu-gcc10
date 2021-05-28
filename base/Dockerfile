@@ -84,11 +84,9 @@ RUN apt-get -qq update \
     && apt-get -qq autoremove -y \
     && apt-get -qq autoclean \
     && apt-get -qq update \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && runuser -u conan -- printf 'eval "$(pyenv init -)"\n' >> /home/conan/.bashrc \
+    && runuser -u conan -- printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc
 
 USER conan
 WORKDIR /home/conan
-
-RUN mkdir -p /home/conan/.conan \
-    && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \
-    && printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc

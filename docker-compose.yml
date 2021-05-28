@@ -5,11 +5,11 @@ services:
             context: base
             dockerfile: Dockerfile
             args:
-                CMAKE_VERSION_FULL: 3.19.6
-                CMAKE_VERSION: 3.19
-                PYTHON_VERSION: 3.8.8
-                CONAN_VERSION: 1.36.0
-        image: "${DOCKER_REPOSITORY}/base"
+                CMAKE_VERSION_FULL: ${CMAKE_VERSION_FULL}
+                CMAKE_VERSION: ${CMAKE_VERSION}
+                PYTHON_VERSION: ${PYTHON_VERSION}
+                CONAN_VERSION: ${CONAN_VERSION}
+        image: ${DOCKER_REPOSITORY}/base-ubuntu16.04
         container_name: base
         tty: true
     gcc5:
@@ -18,7 +18,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 5.5.0
-        image: "${DOCKER_REPOSITORY}/gcc5"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc5-ubuntu16.04
         container_name: gcc5
         tty: true
     gcc6:
@@ -27,7 +29,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 6.5.0
-        image: "${DOCKER_REPOSITORY}/gcc6"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc6-ubuntu16.04
         container_name: gcc6
         tty: true
     gcc7:
@@ -36,7 +40,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 7.5.0
-        image: "${DOCKER_REPOSITORY}/gcc7"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc7-ubuntu16.04
         container_name: gcc7
         tty: true
     gcc8:
@@ -45,7 +51,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 8.4.0
-        image: "${DOCKER_REPOSITORY}/gcc8"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc8-ubuntu16.04
         container_name: gcc8
         tty: true
     gcc9:
@@ -54,7 +62,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 9.3.0
-        image: "${DOCKER_REPOSITORY}/gcc9"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc9-ubuntu16.04
         container_name: gcc9
         tty: true
         depends_on:
@@ -65,7 +75,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 10.3.0
-        image: "${DOCKER_REPOSITORY}/gcc10"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc10-ubuntu16.04
         container_name: gcc10
         tty: true
     gcc11:
@@ -74,7 +86,9 @@ services:
             dockerfile: Dockerfile
             args:
                 GCC_VERSION: 11.1.0
-        image: "${DOCKER_REPOSITORY}/gcc11"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/gcc11-ubuntu16.04
         container_name: gcc10
         tty: true
     clang9:
@@ -83,7 +97,9 @@ services:
             dockerfile: Dockerfile
             args:
                 LLVM_VERSION: 9.0.1
-        image: "${DOCKER_REPOSITORY}/clang9"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/clang9-ubuntu16.04
         container_name: clang9
         tty: true
     clang10:
@@ -92,7 +108,9 @@ services:
             dockerfile: Dockerfile
             args:
                 LLVM_VERSION: 10.0.1
-        image: "${DOCKER_REPOSITORY}/clang10"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/clang10-ubuntu16.04
         container_name: clang10
         tty: true
     clang11:
@@ -101,7 +119,9 @@ services:
             dockerfile: Dockerfile
             args:
                 LLVM_VERSION: 11.1.0
-        image: "${DOCKER_REPOSITORY}/clang11"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/clang11-ubuntu16.04
         container_name: clang11
         tty: true
     clang12:
@@ -110,6 +130,8 @@ services:
             dockerfile: Dockerfile
             args:
                 LLVM_VERSION: 12.0.0
-        image: "${DOCKER_REPOSITORY}/clang12"
+                CONAN_VERSION: ${CONAN_VERSION}
+                DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+        image: ${DOCKER_REPOSITORY}/clang12-ubuntu16.04
         container_name: clang12
         tty: true

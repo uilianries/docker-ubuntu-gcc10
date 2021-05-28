@@ -2,7 +2,7 @@ ARG DOCKER_REPOSITORY
 
 FROM ${DOCKER_REPOSITORY}/base as builder
 
-ARG LLVM_VERSION ARTIFACTORY_TOKEN ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
+ARG LLVM_VERSION ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
@@ -17,9 +17,8 @@ RUN sudo apt-get -qq update \
     && wget -q --no-check-certificate https://github.com/llvm/llvm-project/archive/llvmorg-${LLVM_VERSION}.tar.gz \
     && tar zxf llvmorg-${LLVM_VERSION}.tar.gz \
     && sed -E -i 's/OUTPUT_NAME\s+"unwind"/OUTPUT_NAME "llvm-unwind"/g' llvm-project-llvmorg-${LLVM_VERSION}/libunwind/src/CMakeLists.txt \
-    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp
-
-RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
+    && sed -i 's/unwind/llvm-unwind/g' llvm-project-llvmorg-${LLVM_VERSION}/clang/lib/Driver/ToolChains/CommonArgs.cpp \
+    && cd llvm-project-llvmorg-${LLVM_VERSION} \
     && mkdir build \
     && cd build/ \
     && cmake ../llvm \
@@ -101,44 +100,39 @@ RUN cd llvm-project-llvmorg-${LLVM_VERSION} \
     && ninja clang \
     && ninja lld \
     && ninja compiler-rt \
-    && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt
+    && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt \
+    && cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
+    && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib \
+    && mkdir /tmp/gcc \
+    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
+    && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
 
 # FIXME: Clang 9 and 10 fail to build libcxx because they try to link libc++abi from system.
 #        We could add a patch with target_link_directories, but I prefered copying libc++abi to /usr/lib
 
-RUN cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
-    && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib
-
-RUN mkdir /tmp/gcc \
-    && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
-    && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
-
 FROM ${DOCKER_REPOSITORY}/base as final
 
-ARG ARTIFACTORY_REPOSITORY LIBSTDCPP_VERSION=10.3.0
+ARG CONAN_VERSION LIBSTDCPP_VERSION=10.3.0
 
 COPY --from=builder /tmp/install /tmp/clang
 COPY --from=builder /tmp/gcc /tmp/gcc
 
-USER root
-
-RUN mv /tmp/gcc/lib64 /usr/local/ \
-    && ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
-    && ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
-    && cp -a /tmp/gcc/include/* /usr/local/include/ \
-    && rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
-    && cp -a /tmp/gcc/lib/gcc/x86_64-linux-gnu/${LIBSTDCPP_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
-    && cp -a /tmp/gcc/lib/* /usr/local/lib/ \
-    && rm -rf /tmp/gcc \
-    && cp -a /tmp/clang/bin/* /usr/local/bin/ \
-    && cp -a /tmp/clang/lib/* /usr/local/lib/ \
-    && cp -a /tmp/clang/include/* /usr/local/include/ \
-    && rm -rf /tmp/clang \
-    && update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
-    && update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
-    && update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
-    && update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
-    && rm /etc/ld.so.cache \
-    && ldconfig -C /etc/ld.so.cache
-
-USER conan
+RUN sudo mv /tmp/gcc/lib64 /usr/local/ \
+    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6.0.28 /usr/local/lib64/libstdc++.so.6 \
+    && sudo ln -s -f /usr/local/lib64/libstdc++.so.6 /usr/local/lib64/libstdc++.so \
+    && sudo cp -a /tmp/gcc/include/* /usr/local/include/ \
+    && sudo rm -rf /usr/lib/gcc/x86_64-linux-gnu/* \
+    && sudo cp -a /tmp/gcc/lib/gcc/x86_64-linux-gnu/${LIBSTDCPP_VERSION} /usr/lib/gcc/x86_64-linux-gnu/ \
+    && sudo cp -a /tmp/gcc/lib/* /usr/local/lib/ \
+    && sudo rm -rf /tmp/gcc \
+    && sudo cp -a /tmp/clang/bin/* /usr/local/bin/ \
+    && sudo cp -a /tmp/clang/lib/* /usr/local/lib/ \
+    && sudo cp -a /tmp/clang/include/* /usr/local/include/ \
+    && sudo rm -rf /tmp/clang \
+    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/local/bin/clang 100 \
+    && sudo update-alternatives --install /usr/local/bin/cpp ccp /usr/local/bin/clang++ 100 \
+    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/local/bin/clang++ 100 \
+    && sudo update-alternatives --install /usr/local/bin/ld ld /usr/local/bin/ld.lld 100 \
+    && sudo rm /etc/ld.so.cache \
+    && sudo ldconfig -C /etc/ld.so.cache \
+    && pip install conan==${CONAN_VERSION}
