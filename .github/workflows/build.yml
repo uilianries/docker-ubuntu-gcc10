@@ -2,7 +2,6 @@ name: Build and Deploy
 on: [push]
 jobs:
   base:
-    if: False
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -15,11 +14,12 @@ jobs:
     - name: Docker Upload image base
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/base
   build-gcc:
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10, gcc11]
+        version: [gcc5, gcc6, gcc7, gcc8, gcc9, gcc10]
     steps:
     - uses: actions/checkout@master
     - name: Build ${{ matrix.version }}
@@ -31,6 +31,7 @@ jobs:
     - name: Docker Upload image ${{ matrix.version }}
       run: docker push ${{ secrets.DOCKER_REPOSITORY }}/${{ matrix.version }}
   build-clang:
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
