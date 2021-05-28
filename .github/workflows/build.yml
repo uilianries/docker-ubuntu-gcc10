@@ -12,6 +12,8 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image base
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: docker-compose push base
   build-gcc:
     needs: base
@@ -29,6 +31,8 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image ${{ matrix.version }}
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: docker-compose push ${{ matrix.version }}
   build-clang:
     needs: base
@@ -46,6 +50,8 @@ jobs:
     - name: Docker login
       run: docker login ${{ secrets.DOCKER_REPOSITORY }} -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Docker Upload image ${{ matrix.version }}
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
       run: docker-compose push  ${{ matrix.version }}
   test-gcc:
     needs: build-gcc
