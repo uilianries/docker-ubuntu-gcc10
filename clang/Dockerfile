@@ -101,8 +101,8 @@ RUN sudo apt-get -qq update \
     && ninja lld \
     && ninja compiler-rt \
     && ninja install-unwind install-cxxabi install-cxx install-clang install-lld install-compiler-rt \
-    && cp -a llvm-project-llvmorg-${LLVM_VERSION}/build/lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
-    && cp $(find /home/conan/llvm-project-llvmorg-${LLVM_VERSION}/build/lib -name "*.so*") /tmp/install/lib \
+    && cp -a lib/clang/${LLVM_VERSION}/include /tmp/install/lib/clang/${LLVM_VERSION}/include \
+    && cp $(find lib -name "*.so*") /tmp/install/lib \
     && mkdir /tmp/gcc \
     && curl -s -O "${ARTIFACTORY_REPOSITORY}/gcc-${LIBSTDCPP_VERSION}.tar.gz" \
     && tar zxf gcc-${LIBSTDCPP_VERSION}.tar.gz -C /tmp/gcc
