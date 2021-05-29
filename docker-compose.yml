@@ -23,6 +23,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc5-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc5-builder
         tty: true
@@ -36,6 +37,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc6-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc6-builder
         tty: true
@@ -49,6 +51,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc7-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc7-builder
         tty: true
@@ -62,6 +65,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc8-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc8-builder
         tty: true
@@ -75,6 +79,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc9-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc9-builder
         tty: true
@@ -88,6 +93,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc10-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10-builder
         tty: true
@@ -101,6 +107,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc11-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc11-builder
         tty: true
@@ -114,6 +121,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang9-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang9-builder
         tty: true
@@ -127,6 +135,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang10-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang10-builder
         tty: true
@@ -140,6 +149,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang11-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang11-builder
         tty: true
@@ -153,6 +163,7 @@ services:
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 ARTIFACTORY_REPOSITORY: ${ARTIFACTORY_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang12-builder-ubuntu16.04:${CONAN_VERSION}
         container_name: clang12-builder
         tty: true
@@ -167,6 +178,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc5-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc5-deploy
         tty: true
@@ -180,6 +192,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc6-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc6-deploy
         tty: true
@@ -193,6 +206,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc7-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc7-deploy
         tty: true
@@ -206,6 +220,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc8-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc8-deploy
         tty: true
@@ -219,6 +234,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc9-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc9-deploy
         tty: true
@@ -232,6 +248,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc10-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc10-deploy
         tty: true
@@ -245,6 +262,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/gcc11-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: gcc11-deploy
         tty: true
@@ -258,6 +276,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang9-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang9-deploy
         tty: true
@@ -271,6 +290,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang10-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang10-deploy
         tty: true
@@ -284,6 +304,7 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang11-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang11-deploy
         tty: true
@@ -297,11 +318,10 @@ services:
             args:
                 LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
                 DOCKER_REPOSITORY: ${DOCKER_REPOSITORY}
+                CONAN_VERSION: ${CONAN_VERSION}
         image: ${DOCKER_REPOSITORY}/clang12-deploy-ubuntu16.04:${CONAN_VERSION}
         container_name: clang12-deploy
         tty: true
-
-
 
     gcc5-conan:
         build:
